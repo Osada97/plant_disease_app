@@ -1,0 +1,22 @@
+<svg width="354" height="355" viewBox="0 0 354 355" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Illustrations">
+<g id="illustration">
+<path id="Mask" fill-rule="evenodd" clip-rule="evenodd" d="M177 354.939C274.754 354.939 354 275.693 354 177.939C354 80.1844 274.754 0.938843 177 0.938843C79.2456 0.938843 0 80.1844 0 177.939C0 275.693 79.2456 354.939 177 354.939Z" fill="#F1EFDD"/>
+<mask id="mask0_2_612" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="354" height="355">
+<path id="Mask_2" fill-rule="evenodd" clip-rule="evenodd" d="M177 354.939C274.754 354.939 354 275.693 354 177.939C354 80.1844 274.754 0.938843 177 0.938843C79.2456 0.938843 0 80.1844 0 177.939C0 275.693 79.2456 354.939 177 354.939Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_2_612)">
+</g>
+</g>
+<g id="Group 2">
+<path id="Oval" fill-rule="evenodd" clip-rule="evenodd" d="M305.458 302.918C308.728 302.918 311.378 300.267 311.378 296.998C311.378 293.728 308.728 291.078 305.458 291.078C302.189 291.078 299.539 293.728 299.539 296.998C299.539 300.267 302.189 302.918 305.458 302.918Z" fill="#22A45D"/>
+<path id="Oval Copy" fill-rule="evenodd" clip-rule="evenodd" d="M166.937 92.1751C170.206 92.1751 172.856 89.5247 172.856 86.2554C172.856 82.986 170.206 80.3356 166.937 80.3356C163.667 80.3356 161.017 82.986 161.017 86.2554C161.017 89.5247 163.667 92.1751 166.937 92.1751Z" fill="#22A45D"/>
+<path id="Oval Copy 2" fill-rule="evenodd" clip-rule="evenodd" d="M17.7593 104.015C21.0287 104.015 23.6791 101.364 23.6791 98.0948C23.6791 94.8255 21.0287 92.1751 17.7593 92.1751C14.49 92.1751 11.8396 94.8255 11.8396 98.0948C11.8396 101.364 14.49 104.015 17.7593 104.015Z" fill="#22A45D"/>
+<path id="Oval Copy 3" fill-rule="evenodd" clip-rule="evenodd" d="M41.4383 234.249C44.7077 234.249 47.358 231.598 47.358 228.329C47.358 225.06 44.7077 222.409 41.4383 222.409C38.1689 222.409 35.5186 225.06 35.5186 228.329C35.5186 231.598 38.1689 234.249 41.4383 234.249Z" fill="#22A45D"/>
+<path id="Polygon Copy 3" fill-rule="evenodd" clip-rule="evenodd" d="M27.8228 55.4728L35.5185 63.1684L27.8228 70.8641L20.1272 63.1684L27.8228 55.4728Z" fill="#FFD841"/>
+<path id="Polygon" fill-rule="evenodd" clip-rule="evenodd" d="M83.4684 247.272L91.164 254.968L83.4684 262.663L75.7727 254.968L83.4684 247.272Z" fill="#FFD841"/>
+<path id="Polygon Copy" fill-rule="evenodd" clip-rule="evenodd" d="M319.074 262.663L326.769 270.359L319.074 278.055L311.378 270.359L319.074 262.663Z" fill="#FFD841"/>
+<path id="Polygon Copy 2" fill-rule="evenodd" clip-rule="evenodd" d="M186.472 115.854L194.167 123.55L186.472 131.245L178.776 123.55L186.472 115.854Z" fill="#FFD841"/>
+</g>
+</g>
+</svg>
