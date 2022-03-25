@@ -1,7 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  useWindowDimensions,
+} from "react-native";
 import GlobalStyles from "../utils/GlobalStyles";
-import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
 import { WelcomeOne, WelcomeTwo, WelcomeThree } from "../assets/svgs/Welcome";
 
 const WelcomeComponents = ({ item }) => {
@@ -172,6 +177,7 @@ const styles = StyleSheet.create({
   },
   TextRow: {
     flex: 0.5,
+    justifyContent: "center",
   },
   mainText: {
     textAlign: "center",
@@ -185,5 +191,4 @@ const styles = StyleSheet.create({
     color: "#777",
     lineHeight: 25,
   },
-  gridCol: {},
 });

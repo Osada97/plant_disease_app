@@ -10,6 +10,7 @@ import React, { useRef, useState } from "react";
 import GlobalStyles from "../utils/GlobalStyles";
 import { WelcomeComponents } from "../components/WelcomeComponents";
 import WelcomeSlides from "../utils/WelcomeSlides";
+import WelcomePginator from "../components/WelcomePginator";
 
 const WelcomeScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -34,7 +35,7 @@ const WelcomeScreen = () => {
           renderItem={({ item }) => <WelcomeComponents item={item} />}
           keyExtractor={(item) => item.id}
           horizontal
-          showsHorizontalScrollIndicator
+          showsHorizontalScrollIndicator={false}
           pagingEnabled
           bounces={false}
           onScroll={Animated.event(
@@ -47,6 +48,7 @@ const WelcomeScreen = () => {
           ref={slideRef}
         />
       </View>
+      <WelcomePginator data={WelcomeSlides} scrollX={scrollX} />
       <View style={styles.ButtonRow}>
         <TouchableOpacity style={styles.Button}>
           <Text style={styles.ButtonText}>GET STARTED</Text>
@@ -70,14 +72,14 @@ const styles = StyleSheet.create({
   skipText: {
     fontSize: 15,
     fontFamily: GlobalStyles.boldFonts,
-    color: "orange",
+    color: GlobalStyles.mainColor,
   },
   ButtonRow: {
     padding: 10,
   },
   Button: {
     width: "100%",
-    backgroundColor: GlobalStyles.buttonColor,
+    backgroundColor: GlobalStyles.mainColor,
     padding: 15,
     borderRadius: 10,
   },
