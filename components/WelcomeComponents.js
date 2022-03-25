@@ -65,19 +65,29 @@ const ImageSectionOne = ({ width }) => {
 const ImageSectionTwo = ({ width }) => {
   return (
     <>
-      <View style={styles.imageRow}>
-        <View>
+      <View style={[styles.imageRow, styles.imageRowSec]}>
+        <View style={{ alignItems: "flex-end" }}>
           <Image
-            style={styles.image}
+            style={styles.imageSecond}
             source={require("../assets/jpgs/welcome1.jpg")}
-            resizeMode="contain"
+            resizeMode="cover"
+          />
+          <Image
+            style={[styles.imageSecond, styles.smallImage]}
+            source={require("../assets/jpgs/welcome2.jpg")}
+            resizeMode="cover"
           />
         </View>
         <View>
           <Image
-            style={[styles.image, styles.image2]}
-            source={require("../assets/jpgs/welcome2.jpg")}
-            resizeMode="contain"
+            style={[styles.imageSecond, styles.smallImage]}
+            source={require("../assets/jpgs/welcome3.jpg")}
+            resizeMode="cover"
+          />
+          <Image
+            style={styles.imageSecond}
+            source={require("../assets/jpgs/welcome1.jpg")}
+            resizeMode="cover"
           />
         </View>
       </View>
@@ -90,12 +100,12 @@ const ImageSectionTwo = ({ width }) => {
 const ImageSectionThree = ({ width }) => {
   return (
     <>
-      <View style={styles.imageRow}>
+      <View style={[styles.imageRow, styles.imageRowSec]}>
         <View>
           <Image
-            style={styles.image}
+            style={styles.imageThird}
             source={require("../assets/jpgs/welcome1.jpg")}
-            resizeMode="contain"
+            resizeMode="cover"
           />
         </View>
       </View>
@@ -142,6 +152,24 @@ const styles = StyleSheet.create({
   image2: {
     marginTop: 40,
   },
+  imageRowSec: {
+    justifyContent: "space-around",
+  },
+  imageSecond: {
+    width: 155,
+    height: 160,
+    borderRadius: 25,
+    marginBottom: 10,
+  },
+  smallImage: {
+    width: 105,
+    height: 92,
+  },
+  imageThird: {
+    width: 230,
+    height: 280,
+    borderRadius: 25,
+  },
   TextRow: {
     flex: 0.5,
   },
@@ -157,4 +185,5 @@ const styles = StyleSheet.create({
     color: "#777",
     lineHeight: 25,
   },
+  gridCol: {},
 });
