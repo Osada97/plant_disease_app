@@ -1,4 +1,5 @@
 import { SafeAreaView, StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import {
   Montserrat_400Regular,
@@ -11,6 +12,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/montserrat";
 import AppLoading from "expo-app-loading";
+import TabNavigation from "./components/TabNavigation";
 
 export default function App() {
   //loading fonts
@@ -30,7 +32,10 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <WelcomeScreen />
+      <NavigationContainer>
+        {/* <WelcomeScreen /> */}
+        <TabNavigation />
+      </NavigationContainer>
     </SafeAreaView>
   );
 }
