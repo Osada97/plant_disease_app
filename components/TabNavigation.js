@@ -1,12 +1,12 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
-import CommunityScreen from "../screens/CommunityScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 import { faMessage, faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import { faLeaf } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
+import HomeScreenNavigation from "../Navigation/HomeScreenNavigation";
+import CommunityScreenNavigation from "../Navigation/CommunityScreenNavigation";
+import ProfileScreenNavigation from "../Navigation/ProfileScreenNavigation";
 
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
@@ -37,9 +37,9 @@ const TabNavigation = () => {
         tabBarStyle: { height: 58, padding: 10 },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Community" component={CommunityScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Home" component={HomeScreenNavigation} />
+      <Tab.Screen name="Community" component={CommunityScreenNavigation} />
+      <Tab.Screen name="Profile" component={ProfileScreenNavigation} />
     </Tab.Navigator>
   );
 };
