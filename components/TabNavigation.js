@@ -18,9 +18,9 @@ const TabNavigation = () => {
           let iconName;
           size = focused ? 25 : 23;
 
-          if (route.name === "Home") {
+          if (route.name === "HomeNavigation") {
             iconName = faLeaf;
-          } else if (route.name === "Community") {
+          } else if (route.name === "CommunityNavigation") {
             iconName = faMessage;
           } else {
             iconName = faCircleUser;
@@ -37,9 +37,21 @@ const TabNavigation = () => {
         tabBarStyle: { height: 58, padding: 10 },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreenNavigation} />
-      <Tab.Screen name="Community" component={CommunityScreenNavigation} />
-      <Tab.Screen name="Profile" component={ProfileScreenNavigation} />
+      <Tab.Screen
+        name="HomeNavigation"
+        component={HomeScreenNavigation}
+        options={{ title: "Your Crops" }}
+      />
+      <Tab.Screen
+        name="CommunityNavigation"
+        component={CommunityScreenNavigation}
+        options={{ title: "Community" }}
+      />
+      <Tab.Screen
+        name="ProfileNavigation"
+        component={ProfileScreenNavigation}
+        options={{ title: "You" }}
+      />
     </Tab.Navigator>
   );
 };

@@ -1,11 +1,16 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "../screens/HomeScreen";
+import PredictPlantScreen from "../screens/PredictPlantScreen";
+
+const Stack = createNativeStackNavigator();
 
 const HomeScreenNavigation = () => {
   return (
-    <View>
-      <Text>HomeScreenNavigation</Text>
-    </View>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="PredictPlant" component={PredictPlantScreen} />
+    </Stack.Navigator>
   );
 };
 
