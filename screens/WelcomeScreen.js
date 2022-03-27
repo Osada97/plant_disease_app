@@ -11,8 +11,10 @@ import GlobalStyles from "../utils/GlobalStyles";
 import { WelcomeComponents } from "../components/WelcomeComponents";
 import WelcomeSlides from "../utils/WelcomeSlides";
 import WelcomePginator from "../components/WelcomePginator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({ setsetSkip }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slideRef = useRef(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -21,10 +23,19 @@ const WelcomeScreen = () => {
   }).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
+  const setSkip = async () => {
+    try {
+      await AsyncStorage.setItem("Skip", "true");
+      setsetSkip(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.screen}>
       <View style={styles.skipBar}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setSkip()}>
           <Text style={styles.skipText}>SKIP</Text>
         </TouchableOpacity>
       </View>
@@ -50,7 +61,7 @@ const WelcomeScreen = () => {
       </View>
       <WelcomePginator data={WelcomeSlides} scrollX={scrollX} />
       <View style={styles.ButtonRow}>
-        <TouchableOpacity style={styles.Button}>
+        <TouchableOpacity style={styles.Button} onPress={() => setSkip()}>
           <Text style={styles.ButtonText}>GET STARTED</Text>
         </TouchableOpacity>
       </View>
