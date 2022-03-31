@@ -74,7 +74,6 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    paddingTop: 35,
   },
   skipBar: {
     padding: 15,

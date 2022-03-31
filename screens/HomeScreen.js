@@ -3,11 +3,11 @@ import React from "react";
 import SelectPlant from "../components/SelectPlant";
 import SelectImageSection from "../components/SelectImageSection";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <SelectPlant />
-      <SelectImageSection />
+      <SelectImageSection navigation={navigation} />
     </View>
   );
 };
