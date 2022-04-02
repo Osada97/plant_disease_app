@@ -1,13 +1,15 @@
 import { View, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import SelectPlant from "../components/SelectPlant";
 import SelectImageSection from "../components/SelectImageSection";
 
 const HomeScreen = ({ navigation }) => {
+  const [plant, setPlant] = useState("potato");
+
   return (
     <View style={styles.screen}>
-      <SelectPlant />
-      <SelectImageSection navigation={navigation} />
+      <SelectPlant plant={plant} setPlant={setPlant} />
+      <SelectImageSection plant={plant} navigation={navigation} />
     </View>
   );
 };

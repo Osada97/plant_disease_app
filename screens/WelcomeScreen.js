@@ -12,7 +12,6 @@ import { WelcomeComponents } from "../components/WelcomeComponents";
 import WelcomeSlides from "../utils/WelcomeSlides";
 import WelcomePginator from "../components/WelcomePginator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 
 const WelcomeScreen = ({ setsetSkip }) => {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -10,7 +10,7 @@ import { faCamera, faImages } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
 
-const SelectImageSection = ({ navigation }) => {
+const SelectImageSection = ({ plant, navigation }) => {
   return (
     <View style={styles.uploadPlantSection}>
       <Text style={styles.plantSectionText}>Heal Your Plant</Text>
@@ -54,7 +54,10 @@ const SelectImageSection = ({ navigation }) => {
           <TouchableHighlight
             style={[styles.touchableButton]}
             onPress={() =>
-              navigation.navigate("PredictPlant", { type: "gallery" })
+              navigation.navigate("PredictPlant", {
+                type: "gallery",
+                plantType: plant,
+              })
             }
           >
             <View style={{ alignItems: "center" }}>
@@ -67,7 +70,10 @@ const SelectImageSection = ({ navigation }) => {
           <TouchableHighlight
             style={[styles.touchableButton, styles.whiteButton]}
             onPress={() =>
-              navigation.navigate("PredictPlant", { type: "camera" })
+              navigation.navigate("PredictPlant", {
+                type: "camera",
+                plantType: plant,
+              })
             }
           >
             <View style={{ alignItems: "center" }}>

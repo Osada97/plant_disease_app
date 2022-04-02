@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { API_KEY } from "@env";
-import Axios from "axios";
 
 const PredictPlantScreen = ({ route, navigation }) => {
-  const { type } = route.params;
+  const { type, plantType } = route.params;
+
+  console.log(plantType);
 
   useEffect(async () => {
     if (type === "camera") {
@@ -55,19 +56,23 @@ const PredictPlantScreen = ({ route, navigation }) => {
   };
 
   //call axios function
-  const getPredictedResults = async (file) => {
+  const getPredictedResults = async (files) => {
     let formData = new FormData();
+
     formData.append("file", {
-      uri: file.uri,
+      uri: files.uri,
       name: "anyname.jpg",
-      type: "image/jpg",
+      type: "image/jpeg",
     });
 
-    console.log(formData);
+    let res = await fetch(`${API_KEY}/predict?model=${plantType}`, {
+      method: "post",
+      body: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
-    await Axios.post(`${API_KEY}/predict?model=pepper`, formData)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err.response.data));
+    let responseJson = await res.json();
+    console.log(responseJson);
   };
 
   return <></>;

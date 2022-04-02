@@ -1,27 +1,50 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useRef } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableHighlight,
+} from "react-native";
 import GlobalStyles from "../utils/GlobalStyles";
 
-const SelectPlant = () => {
+const SelectPlant = ({ plant, setPlant }) => {
+  const onSelectType = (type) => {
+    setPlant(type);
+  };
   return (
     <View style={styles.selectPlantSection}>
       <View style={[styles.plantCardContainer]}>
-        <View style={[styles.plantCard, styles.plantCardActive]}>
-          <Image
-            style={styles.CardImage}
-            source={require("../assets/pngs/pepper.png")}
-          />
-        </View>
-        <Text style={styles.cardTextStyle}>Bell Pepper</Text>
-      </View>
-      <View style={[styles.plantCardContainer]}>
-        <View style={[styles.plantCard]}>
+        <TouchableHighlight
+          underlayColor={"ffebcc"}
+          style={[
+            styles.plantCard,
+            plant === "potato" && { backgroundColor: "#ffebcc" },
+          ]}
+          onPress={() => onSelectType("potato")}
+        >
           <Image
             style={styles.CardImage}
             source={require("../assets/pngs/potato.png")}
           />
-        </View>
+        </TouchableHighlight>
         <Text style={styles.cardTextStyle}>Potato</Text>
+      </View>
+      <View style={[styles.plantCardContainer]}>
+        <TouchableHighlight
+          underlayColor={"ffe8e8"}
+          style={[
+            styles.plantCard,
+            plant === "pepper" && { backgroundColor: "#ffe8e8" },
+          ]}
+          onPress={() => onSelectType("pepper")}
+        >
+          <Image
+            style={styles.CardImage}
+            source={require("../assets/pngs/pepper.png")}
+          />
+        </TouchableHighlight>
+        <Text style={styles.cardTextStyle}>Bell Pepper</Text>
       </View>
     </View>
   );
@@ -52,9 +75,6 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 2,
     borderColor: "#e6e6e6",
-  },
-  plantCardActive: {
-    backgroundColor: "#ffe8e8",
   },
   cardTextStyle: {
     marginTop: 10,
