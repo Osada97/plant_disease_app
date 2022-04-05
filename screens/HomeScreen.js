@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SelectPlant from "../components/SelectPlant";
 import SelectImageSection from "../components/SelectImageSection";
 

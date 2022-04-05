@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { API_KEY } from "@env";
 
 const PredictPlantScreen = ({ route, navigation }) => {
   const { type, plantType } = route.params;
-
-  console.log(plantType);
 
   useEffect(async () => {
     if (type === "camera") {
@@ -24,7 +22,15 @@ const PredictPlantScreen = ({ route, navigation }) => {
         return <Text>Permission Denied</Text>;
       }
     }
+    hideBottomTabNavigation();
   }, []);
+
+  //hide bottom tab navigation
+  const hideBottomTabNavigation = () => {
+    if (route.name === "PredictPlant") {
+      navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
+    }
+  };
 
   const pickImageCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
