@@ -17,7 +17,10 @@ const HomeScreenNavigation = ({ navigation, route }) => {
       <Stack.Screen
         name="PredictPlant"
         component={PredictPlantScreen}
-        options={{ headerShown: true }}
+        options={{
+          headerShown: true,
+          headerShadowVisible: false,
+        }}
       />
     </Stack.Navigator>
   );

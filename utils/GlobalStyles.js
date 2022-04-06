@@ -3,6 +3,6 @@ export default {
   mediumFonts: "Montserrat_500Medium",
   boldFonts: "Montserrat_600SemiBold",
   SemiBoldFonts: "Montserrat_700Bold",
-  mainColor: "#22A45D",
-  buttonColor: "#689E23",
+  mainColor: "#009688",
+  buttonColor: "#009688",
 };

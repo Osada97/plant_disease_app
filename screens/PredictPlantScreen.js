@@ -1,11 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Dimensions,
+  Animated,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { API_KEY } from "@env";
+import CustomHeader from "../components/CustomHeader";
+import { faBook } from "@fortawesome/free-solid-svg-icons";
+import PredictDetailSec from "../components/PredictDetailSec";
+import HorizontalImageList from "../components/HorizontalImageList";
+
+const images = [
+  "../assets/jpgs/earlyBlight.jpg",
+  "../assets/jpgs/welcome1.jpg",
+  "../assets/jpgs/welcome2.jpg",
+];
 
 const PredictPlantScreen = ({ route, navigation }) => {
   const { type, plantType } = route.params;
+  const windowWidth = Dimensions.get("window").width;
+
+  //hide bottom tab navigation
+  const hideBottomTabNavigation = () => {
+    if (route.name === "PredictPlant") {
+      navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
+      customHeaderStyles();
+    }
+  };
+
+  //custom styles in header
+  const customHeaderStyles = () => {
+    navigation.setOptions({
+      headerTitle: () => <CustomHeader />,
+    });
+  };
 
   useEffect(async () => {
+    hideBottomTabNavigation();
+
     if (type === "camera") {
       const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
       if (cameraStatus.status === "granted") {
@@ -22,15 +58,7 @@ const PredictPlantScreen = ({ route, navigation }) => {
         return <Text>Permission Denied</Text>;
       }
     }
-    hideBottomTabNavigation();
   }, []);
-
-  //hide bottom tab navigation
-  const hideBottomTabNavigation = () => {
-    if (route.name === "PredictPlant") {
-      navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
-    }
-  };
 
   const pickImageCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -78,10 +106,61 @@ const PredictPlantScreen = ({ route, navigation }) => {
     });
 
     let responseJson = await res.json();
-    console.log(responseJson);
   };
 
-  return <></>;
+  const scrollX = useRef(new Animated.Value(0)).current;
+
+  return (
+    <ScrollView style={styles.screen}>
+      <View style={styles.imageViewerSection}>
+        <Animated.FlatList
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            { useNativeDriver: true }
+          )}
+          data={images}
+          renderItem={({ item, index }) => {
+            return (
+              <HorizontalImageList
+                imageUri={item}
+                index={index}
+                scrollX={scrollX}
+              />
+            );
+          }}
+          keyExtractor={(item) => item}
+          horizontal
+          decelerationRate={0.9}
+          snapToInterval={windowWidth * 0.9}
+          scrollEventThrottle={16}
+          bounces={false}
+          contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 10 }}
+        />
+      </View>
+      <View style={styles.detailsSection}>
+        <PredictDetailSec iconName={faBook} />
+        <PredictDetailSec iconName={faBook} />
+        <PredictDetailSec iconName={faBook} />
+      </View>
+    </ScrollView>
+  );
 };
 
 export default PredictPlantScreen;
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
+  imageViewerSection: {
+    backgroundColor: "#f5f5f5",
+    paddingHorizontal: 1,
+    paddingVertical: 35,
+  },
+  detailsSection: {
+    padding: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    backgroundColor: "#fff",
+  },
+});
