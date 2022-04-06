@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   Animated,
+  Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { API_KEY } from "@env";
@@ -13,6 +14,7 @@ import CustomHeader from "../components/CustomHeader";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
 import PredictDetailSec from "../components/PredictDetailSec";
 import HorizontalImageList from "../components/HorizontalImageList";
+import Axios from "axios";
 
 const images = [
   "../assets/jpgs/earlyBlight.jpg",
@@ -22,6 +24,7 @@ const images = [
 
 const PredictPlantScreen = ({ route, navigation }) => {
   const { type, plantType } = route.params;
+  const [plantDetails, setPlantDetails] = useState({});
   const windowWidth = Dimensions.get("window").width;
 
   //hide bottom tab navigation
@@ -35,13 +38,20 @@ const PredictPlantScreen = ({ route, navigation }) => {
   //custom styles in header
   const customHeaderStyles = () => {
     navigation.setOptions({
-      headerTitle: () => <CustomHeader />,
+      headerTitle: () => (
+        <CustomHeader
+          title={plantDetails.desease_name}
+          subTitle={plantDetails.desease_short_description}
+        />
+      ),
     });
   };
 
   useEffect(async () => {
     hideBottomTabNavigation();
+  }, [plantDetails]);
 
+  useEffect(async () => {
     if (type === "camera") {
       const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
       if (cameraStatus.status === "granted") {
@@ -106,6 +116,41 @@ const PredictPlantScreen = ({ route, navigation }) => {
     });
 
     let responseJson = await res.json();
+
+    if (responseJson) {
+      await Axios.get(`${API_KEY}/getplantdetails/${responseJson.class.id}`)
+        .then((res) => {
+          objectRecreate(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const objectRecreate = (data) => {
+    //object recreate
+    const detailObject = {};
+
+    detailObject.id = data.id;
+    detailObject.desease_name = data.desease_name;
+    detailObject.desease_short_description = data.desease_short_description;
+    detailObject.coverImage = [];
+    detailObject.section = [];
+
+    if (data.disease_image) {
+      if (data.disease_image.length != 0) {
+        for (const image of data.disease_image) {
+          detailObject.coverImage.push(image.image_name);
+        }
+      } else {
+        detailObject.coverImage.push(data.default_image);
+      }
+    }
+    detailObject.section.push({
+      plant: data.belong_plant || "",
+      symptoms: data.symptoms || "",
+      more: data.description || "",
+    });
+    setPlantDetails({ ...detailObject });
   };
 
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -118,7 +163,7 @@ const PredictPlantScreen = ({ route, navigation }) => {
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
             { useNativeDriver: true }
           )}
-          data={images}
+          data={plantDetails.coverImage}
           renderItem={({ item, index }) => {
             return (
               <HorizontalImageList
@@ -138,6 +183,14 @@ const PredictPlantScreen = ({ route, navigation }) => {
         />
       </View>
       <View style={styles.detailsSection}>
+        <Image
+          source={{
+            uri: "https://reactnative.dev/img/tiny_logo.png",
+          }}
+          width={500}
+          height={500}
+          resizeMode="cover"
+        />
         <PredictDetailSec iconName={faBook} />
         <PredictDetailSec iconName={faBook} />
         <PredictDetailSec iconName={faBook} />

@@ -2,11 +2,11 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import GlobalStyles from "../utils/GlobalStyles";
 
-const CustomHeader = () => {
+const CustomHeader = ({ title, subTitle }) => {
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>Early Blight</Text>
-      <Text style={styles.subtitle}>Fungus</Text>
+      <Text style={styles.title}>{title || ""}</Text>
+      <Text style={styles.subtitle}>{subTitle || ""}</Text>
     </View>
   );
 };

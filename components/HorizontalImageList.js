@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 const HorizontalImageList = ({ imageUri, index, scrollX }) => {
   const windowWidth = Dimensions.get("window").width;
 
+  console.log(imageUri);
+
   const inputRange = [
     (index - 1) * windowWidth,
     index * windowWidth,
@@ -27,7 +29,7 @@ const HorizontalImageList = ({ imageUri, index, scrollX }) => {
       }}
     >
       <Image
-        source={require("../assets/jpgs/earlyBlight.jpg")}
+        source={{ uri: "http://10.0.2.2:8000/defaults/communityDefault.jpg" }}
         style={styles.image}
         resizeMode="cover"
       />
