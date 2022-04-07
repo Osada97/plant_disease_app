@@ -19,11 +19,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   title: {
-    fontSize: 22,
-    fontWeight: "600",
+    fontSize: 20,
+    fontFamily: GlobalStyles.mediumFonts,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 15,
     color: GlobalStyles.mainColor,
+    textTransform: "capitalize",
   },
 });

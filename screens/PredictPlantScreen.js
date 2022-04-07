@@ -173,7 +173,7 @@ const PredictPlantScreen = ({ route, navigation }) => {
           keyExtractor={(item) => item}
           horizontal
           decelerationRate={0.9}
-          snapToInterval={windowWidth * 0.9}
+          snapToInterval={windowWidth * 0.95}
           scrollEventThrottle={16}
           bounces={false}
           contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 10 }}
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageViewerSection: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f4ffe8",
     paddingHorizontal: 1,
     paddingVertical: 35,
   },

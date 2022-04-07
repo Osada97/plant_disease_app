@@ -12,7 +12,7 @@ const HorizontalImageList = ({ imageUri, index, scrollX }) => {
     index * windowWidth,
     (index + 1) * windowWidth,
   ];
-  const outputRange = [0.9, 1, 0.9];
+  const outputRange = [0.85, 1, 0.85];
 
   const scale = scrollX.interpolate({
     inputRange,
