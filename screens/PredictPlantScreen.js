@@ -212,9 +212,9 @@ export default PredictPlantScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: "#175c4f",
   },
   imageViewerSection: {
-    backgroundColor: "#f4ffe8",
     paddingHorizontal: 1,
     paddingVertical: 35,
   },

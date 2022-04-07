@@ -3,6 +3,6 @@ export default {
   mediumFonts: "Roboto_500Medium",
   SemiBoldFonts: "Roboto_700Bold",
   boldFonts: "Roboto_900Black",
-  mainColor: "#009688",
-  buttonColor: "#009688",
+  mainColor: "#11493e",
+  buttonColor: "#11493e",
 };
