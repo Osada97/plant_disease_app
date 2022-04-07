@@ -1,12 +1,11 @@
 import { View, Dimensions, Animated, Image, StyleSheet } from "react-native";
 import React from "react";
-import { faBook, faGrip } from "@fortawesome/free-solid-svg-icons";
+import { faGrip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { API_KEY } from "@env";
 
 const HorizontalImageList = ({ imageUri, index, scrollX }) => {
   const windowWidth = Dimensions.get("window").width;
-
-  console.log(imageUri);
 
   const inputRange = [
     (index - 1) * windowWidth,
@@ -23,13 +22,13 @@ const HorizontalImageList = ({ imageUri, index, scrollX }) => {
   return (
     <Animated.View
       style={{
-        width: windowWidth * 0.9,
+        width: windowWidth * 0.95,
         transform: [{ scale }],
         position: "relative",
       }}
     >
       <Image
-        source={{ uri: "http://10.0.2.2:8000/defaults/communityDefault.jpg" }}
+        source={{ uri: `${API_KEY}/${imageUri}` }}
         style={styles.image}
         resizeMode="cover"
       />

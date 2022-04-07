@@ -11,16 +11,9 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { API_KEY } from "@env";
 import CustomHeader from "../components/CustomHeader";
-import { faBook } from "@fortawesome/free-solid-svg-icons";
 import PredictDetailSec from "../components/PredictDetailSec";
 import HorizontalImageList from "../components/HorizontalImageList";
 import Axios from "axios";
-
-const images = [
-  "../assets/jpgs/earlyBlight.jpg",
-  "../assets/jpgs/welcome1.jpg",
-  "../assets/jpgs/welcome2.jpg",
-];
 
 const PredictPlantScreen = ({ route, navigation }) => {
   const { type, plantType } = route.params;
@@ -134,7 +127,7 @@ const PredictPlantScreen = ({ route, navigation }) => {
     detailObject.desease_name = data.desease_name;
     detailObject.desease_short_description = data.desease_short_description;
     detailObject.coverImage = [];
-    detailObject.section = [];
+    detailObject.section = {};
 
     if (data.disease_image) {
       if (data.disease_image.length != 0) {
@@ -145,11 +138,15 @@ const PredictPlantScreen = ({ route, navigation }) => {
         detailObject.coverImage.push(data.default_image);
       }
     }
-    detailObject.section.push({
-      plant: data.belong_plant || "",
-      symptoms: data.symptoms || "",
-      more: data.description || "",
-    });
+    detailObject.section["Symptoms"] = data.symptoms || "";
+
+    for (const type of data.medicene) {
+      detailObject.section[type.medicene_type] = type.medicene_description;
+    }
+
+    detailObject.section["Plant Details"] = data.belong_plant || "";
+    detailObject.section["More Info"] = data.description || "";
+
     setPlantDetails({ ...detailObject });
   };
 
@@ -191,9 +188,20 @@ const PredictPlantScreen = ({ route, navigation }) => {
           height={500}
           resizeMode="cover"
         />
-        <PredictDetailSec iconName={faBook} />
-        <PredictDetailSec iconName={faBook} />
-        <PredictDetailSec iconName={faBook} />
+        {plantDetails.section ? (
+          Object.keys(plantDetails.section).map(
+            (data, index) =>
+              plantDetails.section[data] !== "" && (
+                <PredictDetailSec
+                  key={index}
+                  data={plantDetails.section[data]}
+                  title={data}
+                />
+              )
+          )
+        ) : (
+          <Text>There is nothing to show</Text>
+        )}
       </View>
     </ScrollView>
   );
@@ -211,8 +219,9 @@ const styles = StyleSheet.create({
     paddingVertical: 35,
   },
   detailsSection: {
-    padding: 15,
-    borderTopLeftRadius: 15,
+    paddingVertical: 30,
+    paddingHorizontal: 20,
+    borderTopLeftRadius: 25,
     borderTopRightRadius: 15,
     backgroundColor: "#fff",
   },

@@ -3,15 +3,16 @@ import { SafeAreaView, StyleSheet, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import {
-  Montserrat_400Regular,
-  Montserrat_400Regular_Italic,
-  Montserrat_500Medium,
-  Montserrat_600SemiBold,
-  Montserrat_700Bold,
-  Montserrat_800ExtraBold,
-  Montserrat_900Black,
+  Roboto_400Regular,
+  Roboto_400Regular_Italic,
+  Roboto_500Medium,
+  Roboto_500Medium_Italic,
+  Roboto_700Bold,
+  Roboto_700Bold_Italic,
+  Roboto_900Black,
+  Roboto_900Black_Italic,
   useFonts,
-} from "@expo-google-fonts/montserrat";
+} from "@expo-google-fonts/roboto";
 import AppLoading from "expo-app-loading";
 import TabNavigation from "./components/TabNavigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -46,13 +47,14 @@ const CheckSkip = () => {
 export default function App() {
   //loading fonts
   let [FontLoaded] = useFonts({
-    Montserrat_400Regular,
-    Montserrat_400Regular_Italic,
-    Montserrat_500Medium,
-    Montserrat_600SemiBold,
-    Montserrat_700Bold,
-    Montserrat_800ExtraBold,
-    Montserrat_900Black,
+    Roboto_400Regular,
+    Roboto_400Regular_Italic,
+    Roboto_500Medium,
+    Roboto_500Medium_Italic,
+    Roboto_700Bold,
+    Roboto_700Bold_Italic,
+    Roboto_900Black,
+    Roboto_900Black_Italic,
   });
 
   if (!FontLoaded) {

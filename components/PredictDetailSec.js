@@ -2,27 +2,68 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import GlobalStyles from "../utils/GlobalStyles";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faBook,
+  faCircleInfo,
+  faVial,
+  faLeaf,
+  faBookOpen,
+} from "@fortawesome/free-solid-svg-icons";
 
-const PredictDetailSec = ({ iconName }) => {
+const PredictDetailSec = ({ data, title }) => {
+  let iconName = faBook;
+
+  if (title === "More Info") {
+    iconName = faCircleInfo;
+  } else if (title === "Chemical Control") {
+    iconName = faVial;
+  } else if (title === "Organic control") {
+    iconName = faLeaf;
+  } else if (title === "Plant Details") {
+    iconName = faBookOpen;
+  } else {
+    iconName = faBook;
+  }
+
   return (
     <View style={styles.section}>
       <View style={styles.sectionTitle}>
-        <FontAwesomeIcon icon={iconName} size={28} />
-        <Text style={styles.title}>Symptoms</Text>
+        <FontAwesomeIcon icon={iconName} size={25} />
+        <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.detailSec}>
-        <Text style={styles.details}>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nostrum rem
-          numquam autem harum iure illum quo eveniet in consequatur. Eum
-          voluptatem, accusantium placeat velit saepe soluta illo?
-          Necessitatibus, veniam deleniti?
-        </Text>
-        <Text style={styles.details}>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nostrum rem
-          numquam autem harum iure illum quo eveniet in consequatur. Eum
-          voluptatem, accusantium placeat velit saepe soluta illo?
-          Necessitatibus, veniam deleniti?
-        </Text>
+        {typeof data !== "object" ? (
+          <Text style={styles.details}>{data}</Text>
+        ) : (
+          Object.keys(data).map((item, index) => (
+            <View style={styles.plantDetails} key={index}>
+              {item === "plant_name" ? (
+                <>
+                  <Text style={[styles.details, styles.detailTitle]}>
+                    Plant Name :{" "}
+                  </Text>
+                  <Text style={[styles.details]}>{data[item]}</Text>
+                </>
+              ) : item === "science_name" ? (
+                <>
+                  <Text style={[styles.details, styles.detailTitle]}>
+                    Scientific Name :{" "}
+                  </Text>
+                  <Text style={[styles.details, styles.ital]}>
+                    {data[item]}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text style={[styles.details, styles.detailTitle]}>
+                    Description :{" "}
+                  </Text>
+                  <Text style={[styles.details]}>{data[item]}</Text>
+                </>
+              )}
+            </View>
+          ))
+        )}
       </View>
     </View>
   );
@@ -48,15 +89,29 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   title: {
-    paddingLeft: 18,
+    paddingLeft: 10,
     fontSize: 18,
     fontFamily: GlobalStyles.mediumFonts,
+    color: "#000",
   },
   details: {
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: GlobalStyles.customFonts,
     textAlign: "justify",
-    lineHeight: 25,
-    color: "#474747",
+    lineHeight: 28,
+    color: "#5c5c5c",
+  },
+  plantDetails: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 10,
+  },
+  detailTitle: {
+    color: "#000",
+  },
+  ital: {
+    fontStyle: "italic",
+    color: "#000",
+    fontWeight: "700",
   },
 });
