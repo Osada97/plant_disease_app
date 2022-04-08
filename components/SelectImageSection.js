@@ -12,78 +12,48 @@ import GlobalStyles from "../utils/GlobalStyles";
 
 const SelectImageSection = ({ plant, navigation }) => {
   return (
-    <View style={styles.uploadPlantSection}>
-      <Text style={styles.plantSectionText}>Heal Your Plant</Text>
-      <View style={styles.predictPlantContainer}>
-        <View style={styles.predictPlantRow}>
-          <View style={styles.imageDes}>
-            <Image
-              style={styles.image}
-              source={require("../assets/pngs/plantImage.png")}
+    <View style={styles.BottomSection}>
+      <View>
+        <Text style={styles.BottomSectionText}>Take Medicine for Plant</Text>
+        <Text style={styles.BottomSectionSubText}>Your Crop Doctor</Text>
+      </View>
+      <View style={styles.btnRow}>
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("PredictPlant", {
+              type: "gallery",
+              plantType: plant,
+            })
+          }
+        >
+          <View style={styles.inButton}>
+            <FontAwesomeIcon
+              icon={faImages}
+              size={25}
+              color={GlobalStyles.mainColor}
             />
-            <Text style={styles.imgText}>Take a {"\n"} picture</Text>
+            <Text style={[styles.buttonText]}>Gallery</Text>
           </View>
-          <View style={styles.imageDes}>
-            <Image
-              style={styles.image}
-              source={require("../assets/pngs/arrow.png")}
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("PredictPlant", {
+              type: "camera",
+              plantType: plant,
+            })
+          }
+        >
+          <View style={styles.inButton}>
+            <FontAwesomeIcon
+              icon={faCamera}
+              size={25}
+              color={GlobalStyles.mainColor}
             />
+            <Text style={[styles.buttonText]}>Camera</Text>
           </View>
-          <View style={styles.imageDes}>
-            <Image
-              style={styles.image}
-              source={require("../assets/pngs/seeDiaganise.png")}
-            />
-            <Text style={styles.imgText}>Take a {"\n"} picture</Text>
-          </View>
-          <View style={styles.imageDes}>
-            <Image
-              style={styles.image}
-              source={require("../assets/pngs/arrow.png")}
-            />
-          </View>
-          <View style={styles.imageDes}>
-            <Image
-              style={styles.image}
-              source={require("../assets/pngs/med.png")}
-            />
-            <Text style={styles.imgText}>Take a {"\n"} picture</Text>
-          </View>
-        </View>
-        <View style={styles.buttonSection}>
-          <TouchableHighlight
-            style={[styles.touchableButton]}
-            onPress={() =>
-              navigation.navigate("PredictPlant", {
-                type: "gallery",
-                plantType: plant,
-              })
-            }
-          >
-            <View style={{ alignItems: "center" }}>
-              <FontAwesomeIcon icon={faImages} size={25} color="white" />
-              <Text style={[styles.buttonText, { color: "white" }]}>
-                GALLERY
-              </Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={[styles.touchableButton, styles.whiteButton]}
-            onPress={() =>
-              navigation.navigate("PredictPlant", {
-                type: "camera",
-                plantType: plant,
-              })
-            }
-          >
-            <View style={{ alignItems: "center" }}>
-              <FontAwesomeIcon icon={faCamera} size={25} color="#393939" />
-              <Text style={[styles.buttonText, { color: "#393939" }]}>
-                TAKE A PHOTO
-              </Text>
-            </View>
-          </TouchableHighlight>
-        </View>
+        </TouchableHighlight>
       </View>
     </View>
   );
@@ -92,59 +62,47 @@ const SelectImageSection = ({ plant, navigation }) => {
 export default SelectImageSection;
 
 const styles = StyleSheet.create({
-  uploadPlantSection: {
+  BottomSection: {
     width: "100%",
+    flex: 0.4,
+    backgroundColor: GlobalStyles.mainColor,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     padding: 20,
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
-  plantSectionText: {
+  BottomSectionText: {
     fontFamily: GlobalStyles.mediumFonts,
-    fontSize: 17,
+    fontSize: 25,
+    color: "#fff",
   },
-  predictPlantContainer: {
-    backgroundColor: "#F5F5F5",
-    paddingVertical: 35,
-    paddingHorizontal: 20,
-    marginTop: 15,
+  BottomSectionSubText: {
+    fontFamily: GlobalStyles.mediumFonts,
+    fontSize: 16,
+    color: "#ffffff59",
+    textAlign: "center",
+  },
+  btnRow: {
+    flexDirection: "row",
+  },
+  inButton: {
+    alignItems: "center",
+  },
+  button: {
+    width: 120,
+    height: 80,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 10,
+    padding: 10,
     borderRadius: 15,
   },
-  predictPlantRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 35,
-  },
-  image: {
-    width: 65,
-    height: 65,
-    marginBottom: 10,
-  },
-  imgText: {
-    fontSize: 15,
-    textAlign: "center",
-    color: GlobalStyles.mainColor,
-    fontFamily: GlobalStyles.mediumFonts,
-  },
-  buttonSection: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  whiteButton: {
-    backgroundColor: "white",
-  },
   buttonText: {
-    textAlign: "center",
-    marginTop: 10,
     fontSize: 15,
-  },
-  touchableButton: {
-    backgroundColor: GlobalStyles.mainColor,
-    padding: 15,
-    width: 160,
-    borderRadius: 20,
-    flexShrink: 1,
-    shadowColor: "#eee",
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 20,
-    shadowRadius: 5,
-    elevation: 5,
+    fontFamily: GlobalStyles.SemiBoldFonts,
+    color: GlobalStyles.mainColor,
+    marginTop: 5,
   },
 });

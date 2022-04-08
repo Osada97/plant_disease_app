@@ -10,41 +10,58 @@ import GlobalStyles from "../utils/GlobalStyles";
 
 const SelectPlant = ({ plant, setPlant }) => {
   const onSelectType = (type) => {
-    setPlant(type);
+    if (plant !== type) {
+      setPlant(type);
+    }
   };
   return (
-    <View style={styles.selectPlantSection}>
-      <View style={[styles.plantCardContainer]}>
+    <View style={styles.topSection}>
+      <View>
+        <Text style={styles.topSectionMainText}>Take Medicine for Plant</Text>
+        <Text style={styles.topSectionSubText}>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        </Text>
+      </View>
+      <View style={styles.imageContainer}>
+        {plant === "potato" ? (
+          <Image
+            style={styles.image}
+            source={require("../assets/jpgs/123.jpg")}
+          />
+        ) : (
+          <Image
+            style={styles.image}
+            source={require("../assets/jpgs/456.jpg")}
+          />
+        )}
+      </View>
+      <View style={styles.selectSection}>
         <TouchableHighlight
-          underlayColor={"ffebcc"}
           style={[
-            styles.plantCard,
-            plant === "potato" && { backgroundColor: "#ffebcc" },
+            styles.secButton,
+            { backgroundColor: plant === "potato" ? "#fffce3" : "#fff" },
           ]}
           onPress={() => onSelectType("potato")}
+          underlayColor="#fffce3"
         >
           <Image
             style={styles.CardImage}
             source={require("../assets/pngs/potato.png")}
           />
         </TouchableHighlight>
-        <Text style={styles.cardTextStyle}>Potato</Text>
-      </View>
-      <View style={[styles.plantCardContainer]}>
         <TouchableHighlight
-          underlayColor={"ffe8e8"}
           style={[
-            styles.plantCard,
-            plant === "pepper" && { backgroundColor: "#ffe8e8" },
+            styles.secButton,
+            { backgroundColor: plant === "pepper" ? "#ffe3e3" : "#fff" },
           ]}
           onPress={() => onSelectType("pepper")}
+          underlayColor="#ffe3e3"
         >
           <Image
             style={styles.CardImage}
             source={require("../assets/pngs/pepper.png")}
           />
         </TouchableHighlight>
-        <Text style={styles.cardTextStyle}>Bell Pepper</Text>
       </View>
     </View>
   );
@@ -53,36 +70,53 @@ const SelectPlant = ({ plant, setPlant }) => {
 export default SelectPlant;
 
 const styles = StyleSheet.create({
-  selectPlantSection: {
-    width: "100%",
-    padding: 15,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    borderBottomColor: "#eee",
-    borderBottomWidth: 1,
-  },
-  plantCardContainer: {
+  topSection: {
+    flex: 0.6,
+    justifyContent: "space-between",
     alignItems: "center",
+    padding: 20,
   },
-  plantCard: {
-    backgroundColor: "#fafafa",
-    width: 70,
-    height: 70,
-    marginHorizontal: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-    borderStyle: "solid",
-    borderWidth: 2,
-    borderColor: "#e6e6e6",
+  topSectionMainText: {
+    fontFamily: GlobalStyles.boldFonts,
+    fontSize: 30,
+    marginBottom: 5,
   },
-  cardTextStyle: {
-    marginTop: 10,
+  topSectionSubText: {
     fontFamily: GlobalStyles.customFonts,
-    fontSize: 13,
+    fontSize: 16,
+    textAlign: "center",
+    color: "#808080",
+  },
+  imageContainer: {
+    width: 180,
+    height: 180,
+    backgroundColor: "#fff",
+    overflow: "hidden",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+  },
+  selectSection: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 5,
+    borderRadius: 15,
+  },
+  secButton: {
+    width: 55,
+    height: 55,
+    borderRadius: 50,
+    borderColor: "#dbdbdb",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    padding: 10,
+    marginHorizontal: 5,
   },
   CardImage: {
-    width: 35,
-    height: 35,
+    width: "100%",
+    height: "100%",
   },
 });
