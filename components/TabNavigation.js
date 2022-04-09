@@ -35,6 +35,7 @@ const TabNavigation = () => {
           fontSize: 13,
         },
         tabBarStyle: { height: 58, padding: 10 },
+        tabBarHideOnKeyboard: true,
       })}
     >
       <Tab.Screen

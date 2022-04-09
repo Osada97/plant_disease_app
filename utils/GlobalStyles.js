@@ -5,4 +5,5 @@ export default {
   boldFonts: "Roboto_900Black",
   mainColor: "#11493e",
   buttonColor: "#11493e",
+  inputBackground: "#EBF2F0",
 };
