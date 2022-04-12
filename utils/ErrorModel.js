@@ -116,5 +116,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: GlobalStyles.customFonts,
     marginTop: 3,
+    textTransform: "capitalize",
   },
 });

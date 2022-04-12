@@ -6,76 +6,62 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import GlobalStyles from "../utils/GlobalStyles";
-import ValidateSignUp from "./ValidateSignUp";
 import ErrorModel from "../utils/ErrorModel";
+import axios from "axios";
+import { API_KEY } from "@env";
+import SignUpCustomHook from "../utils/hook/SignUpCustomHook";
+import GetLocation from "../utils/GetLocation";
 
 const SignUpForm = ({ navigation }) => {
-  const [loginForm, setLoginForm] = useState({
-    firstName: "",
-    lastName: "",
-    userName: "",
-    email: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
-    userName: "",
-    email: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [isModel, setIsModel] = useState(false);
-  const [checkError, setCheckError] = useState(false);
-  const [isSubmit, setIsSubmit] = useState(false);
+  const {
+    isModel,
+    setValues,
+    onSubmit,
+    onFocus,
+    errors,
+    setErrors,
+    setIsModel,
+    setCheckError,
+    checkError,
+    loginForm,
+  } = SignUpCustomHook(handelSubmit);
 
-  useEffect(() => {
-    //check if there is an any errors and show the model
-    if (Object.keys(errors).length > 0) {
-      if (errors[Object.keys(errors)[0]] !== "") {
-        setIsModel(true);
-      }
-    }
-  }, [checkError]);
+  const { location } = GetLocation();
 
-  useEffect(() => {
-    //check if there is an any errors and show the model
-    if (Object.keys(errors).length === 0 && isSubmit) {
-      handelSubmit();
-    }
-  }, [errors]);
-
-  const setValues = (text, name) => {
-    setLoginForm({ ...loginForm, [name]: text });
-  };
-
-  const onSubmit = () => {
-    setErrors(ValidateSignUp(loginForm));
-    setCheckError(!checkError);
-    setIsSubmit(true);
-  };
-
-  const onFocus = (type) => {
-    if (errors[type] && errors[type] !== "") {
-      setErrors({ ...errors, [type]: "" });
-    }
-  };
-
-  const handelSubmit = () => {
-    console.log(errors);
-    console.log("handel submit");
-  };
+  async function handelSubmit() {
+    await axios
+      .post(`${API_KEY}/user/createaccount`, {
+        first_name: loginForm.firstName,
+        last_name: loginForm.lastName,
+        username: loginForm.userName,
+        email: loginForm.email,
+        phone_number: loginForm.phoneNumber,
+        location: location || null,
+        password: loginForm.confirmPassword,
+        profile_picture: "",
+      })
+      .then((res) => {
+        navigation.navigate("login");
+      })
+      .catch((err) => {
+        //set errors
+        if (err.response.data.detail.userName) {
+          setErrors({ ...errors, userName: err.response.data.detail.userName });
+        }
+        if (err.response.data.detail.email) {
+          setErrors({ ...errors, email: err.response.data.detail.email });
+        }
+        setCheckError(!checkError);
+      });
+  }
 
   return (
     <View style={styles.form}>
       {isModel && (
         <ErrorModel
-          title="Login Failed"
+          title="SignUp Failed"
           msg={errors}
           type="Error"
           setIsModel={setIsModel}
@@ -190,6 +176,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     width: "100%",
     borderRadius: 8,
+    textTransform: "capitalize",
   },
   inputStyleError: {
     backgroundColor: "#fff5f5",

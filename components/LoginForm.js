@@ -6,60 +6,50 @@ import {
   TouchableWithoutFeedback,
   TextInput,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import GlobalStyles from "../utils/GlobalStyles";
 import ErrorModel from "../utils/ErrorModel";
+import LoginCustomHook from "../utils/hook/LoginCustomHook";
+import axios from "axios";
+import { API_KEY } from "@env";
+import { getSecureValue, setSecureValue } from "../utils/SecureStore";
 
 const LoginForm = ({ navigation }) => {
-  const [loginForm, setLoginForm] = useState({ userName: "", password: "" });
-  const [errors, setErrors] = useState({ userName: "", password: "" });
-  const [isModel, setIsModel] = useState(false);
-  const [checkError, setCheckError] = useState(false);
-  const [isSubmit, setIsSubmit] = useState(false);
+  const {
+    isModel,
+    onFocus,
+    onSubmit,
+    setValues,
+    setIsModel,
+    errors,
+    setErrors,
+    loginForm,
+    setCheckError,
+    checkError,
+  } = LoginCustomHook(handelSubmit);
 
-  useEffect(() => {
-    //check if there is an any errors and show the model
-    if (Object.keys(errors).length > 0) {
-      if (errors[Object.keys(errors)[0]] !== "") {
-        setIsModel(true);
-      }
-    }
-  }, [checkError]);
-
-  useEffect(() => {
-    //check if there is an any errors and show the model
-    if (Object.keys(errors).length === 0 && isSubmit) {
-      handelSubmit();
-    }
-  }, [errors]);
-
-  const setValues = (text, name) => {
-    setLoginForm({ ...loginForm, [name]: text });
-  };
-
-  const onSubmit = () => {
-    let formErrors = {};
-
-    if (loginForm.userName.trim().length === 0) {
-      formErrors.userName = "Please Enter UserName";
-    }
-    if (loginForm.password.trim().length === 0) {
-      formErrors.password = "Please Enter Password";
-    }
-    setErrors({ ...formErrors });
-    setCheckError(!checkError);
-    setIsSubmit(true);
-  };
-
-  const onFocus = (type) => {
-    if (errors[type] && errors[type] !== "") {
-      setErrors({ ...errors, [type]: "" });
-    }
-  };
-
-  const handelSubmit = () => {
-    console.log("handel submit");
-  };
+  async function handelSubmit() {
+    await axios
+      .post(`${API_KEY}/user/login`, {
+        username: loginForm.userName,
+        password: loginForm.password,
+      })
+      .then((res) => {
+        // navigation.navigate("login");
+        setSecureValue("access_token", res.data.access_token);
+      })
+      .catch((err) => {
+        console.log(err.response.data.detail.password);
+        //set errors
+        if (err.response.data.detail.userName) {
+          setErrors({ ...errors, userName: err.response.data.detail.userName });
+        }
+        if (err.response.data.detail.password) {
+          setErrors({ ...errors, password: err.response.data.detail.password });
+        }
+        setCheckError(!checkError);
+      });
+  }
 
   return (
     <View style={styles.form}>
