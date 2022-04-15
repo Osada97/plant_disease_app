@@ -12,7 +12,7 @@ import ErrorModel from "../utils/ErrorModel";
 import LoginCustomHook from "../utils/hook/LoginCustomHook";
 import axios from "axios";
 import { API_KEY } from "@env";
-import { getSecureValue, setSecureValue } from "../utils/SecureStore";
+import { setSecureValue } from "../utils/SecureStore";
 
 const LoginForm = ({ navigation }) => {
   const {
@@ -39,7 +39,6 @@ const LoginForm = ({ navigation }) => {
         setSecureValue("access_token", res.data.access_token);
       })
       .catch((err) => {
-        console.log(err.response.data.detail.password);
         //set errors
         if (err.response.data.detail.userName) {
           setErrors({ ...errors, userName: err.response.data.detail.userName });

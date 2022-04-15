@@ -1,4 +1,3 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { faMessage, faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import { faLeaf } from "@fortawesome/free-solid-svg-icons";

@@ -16,6 +16,10 @@ import {
 import AppLoading from "expo-app-loading";
 import TabNavigation from "./components/TabNavigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createStore, compose, applyMiddleware } from "redux";
+import rootReducer from "./reducers";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
 
 //check skip function
 const CheckSkip = () => {
@@ -61,12 +65,24 @@ export default function App() {
     return <AppLoading />;
   }
 
+  //CREATE STORE
+
+  const composeEnhancer =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+  const store = createStore(
+    rootReducer,
+    composeEnhancer(applyMiddleware(thunk))
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        {/* check skip section */}
-        <CheckSkip />
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          {/* check skip section */}
+          <CheckSkip />
+        </NavigationContainer>
+      </Provider>
     </SafeAreaView>
   );
 }

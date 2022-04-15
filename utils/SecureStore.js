@@ -6,8 +6,12 @@ export async function setSecureValue(key, value) {
 export async function getSecureValue(key) {
   let result = await SecureStore.getItemAsync(key);
   if (result) {
-    alert("🔐 Here's your value 🔐 \n" + result);
+    return result;
   } else {
-    alert("No values stored under that key.");
+    return result;
   }
+}
+
+export async function clearSecureValue(key) {
+  await SecureStore.deleteItemAsync(key);
 }
