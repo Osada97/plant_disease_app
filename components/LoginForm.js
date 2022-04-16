@@ -35,8 +35,8 @@ const LoginForm = ({ navigation }) => {
         password: loginForm.password,
       })
       .then((res) => {
-        // navigation.navigate("login");
         setSecureValue("access_token", res.data.access_token);
+        navigation.navigate("profile");
       })
       .catch((err) => {
         //set errors
