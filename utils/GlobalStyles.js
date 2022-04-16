@@ -6,4 +6,5 @@ export default {
   mainColor: "#11493e",
   buttonColor: "#11493e",
   inputBackground: "#EBF2F0",
+  secondaryColor: "#808080",
 };
