@@ -13,8 +13,11 @@ import LoginCustomHook from "../utils/hook/LoginCustomHook";
 import axios from "axios";
 import { API_KEY } from "@env";
 import { setSecureValue } from "../utils/SecureStore";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../actions/setUserDetails";
 
 const LoginForm = ({ navigation }) => {
+  const dispatch = useDispatch();
   const {
     isModel,
     onFocus,
@@ -36,6 +39,7 @@ const LoginForm = ({ navigation }) => {
       })
       .then((res) => {
         setSecureValue("access_token", res.data.access_token);
+        dispatch(setUserDetails());
         navigation.navigate("profile");
       })
       .catch((err) => {
