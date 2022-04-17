@@ -17,7 +17,7 @@ const UserProfile = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <ProfileTopSection />
-      <ProfileBottomSection />
+      <ProfileBottomSection navigation={navigation} />
     </View>
   );
 };

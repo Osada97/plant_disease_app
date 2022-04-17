@@ -12,7 +12,7 @@ import { clearSecureValue } from "../utils/SecureStore";
 import { useDispatch } from "react-redux";
 import { clearUserDetails } from "../actions/clearUserDetails";
 
-const ProfileBottomSection = () => {
+const ProfileBottomSection = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const logOut = () => {
@@ -42,7 +42,10 @@ const ProfileBottomSection = () => {
             </View>
             <Text style={styles.listText}>My Posts</Text>
           </View>
-          <TouchableOpacity style={styles.directButton}>
+          <TouchableOpacity
+            style={styles.directButton}
+            onPress={() => navigation.navigate("userPosts")}
+          >
             <FontAwesomeIcon icon={faChevronRight} size={18} color="green" />
           </TouchableOpacity>
         </View>
@@ -53,7 +56,10 @@ const ProfileBottomSection = () => {
             </View>
             <Text style={styles.listText}>Settings</Text>
           </View>
-          <TouchableOpacity style={styles.directButton}>
+          <TouchableOpacity
+            style={styles.directButton}
+            onPress={() => navigation.navigate("userSettings")}
+          >
             <FontAwesomeIcon icon={faChevronRight} size={18} color="green" />
           </TouchableOpacity>
         </View>
@@ -64,7 +70,10 @@ const ProfileBottomSection = () => {
             </View>
             <Text style={styles.listText}>Change Password</Text>
           </View>
-          <TouchableOpacity style={styles.directButton}>
+          <TouchableOpacity
+            style={styles.directButton}
+            onPress={() => navigation.navigate("changePassword")}
+          >
             <FontAwesomeIcon icon={faChevronRight} size={18} color="green" />
           </TouchableOpacity>
         </View>

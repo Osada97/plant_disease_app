@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableHighlight,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 import React from "react";
 import { faCamera, faImages } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";

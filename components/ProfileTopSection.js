@@ -2,22 +2,31 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
+import { useSelector } from "react-redux";
+import { API_KEY } from "@env";
 
 const ProfileTopSection = () => {
+  const user = useSelector((state) => state.user.userDetails);
+
   return (
     <View style={styles.profileTopSection}>
       <View style={styles.profileImageSec}>
         <View style={styles.profileImageContainer}>
           <Image
-            source={require("../assets/jpgs/avatar.jpg")}
+            source={{
+              uri: user.profile_picture && `${API_KEY}/${user.profile_picture}`,
+            }}
             style={styles.image}
           />
           <TouchableOpacity style={styles.upSec}>
             <FontAwesomeIcon icon={faCamera} size={18} color="green" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.main}>Osada Manohara</Text>
-        <Text style={styles.sub}>ozka</Text>
+        <Text style={styles.main}>
+          {user.first_name + " " + user.last_name}
+        </Text>
+        <Text style={styles.sub}>{user.email}</Text>
+        <Text style={styles.sub}>{user.user_name}</Text>
       </View>
     </View>
   );
