@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  TouchableHighlight,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import GlobalStyles from "../utils/GlobalStyles";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
