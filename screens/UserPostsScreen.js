@@ -1,27 +1,26 @@
+import { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, TextInput } from "react-native";
 import Post from "../components/Post";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-
-const data = [
-  {
-    id: 1,
-    image: "../assets/jpgs/earlyBlight.jpg",
-    name: "loerm ipsum loerm ipsum",
-  },
-  {
-    id: 2,
-    image: "../assets/jpgs/earlyBlight.jpg",
-    name: "loerm ipsum loerm ipsum",
-  },
-  {
-    id: 3,
-    image: "../assets/jpgs/earlyBlight.jpg",
-    name: "loerm ipsum loerm ipsum",
-  },
-];
+import Axios from "axios";
+import { API_KEY } from "@env";
+import { useSelector } from "react-redux";
 
 const UserPostsScreen = () => {
+  const [userPosts, setUserPosts] = useState([]);
+  const { token, userDetails } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    Axios.get(`${API_KEY}/community/getuserposts/${userDetails.id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((res) => setUserPosts([...res.data]))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <View style={styles.screen}>
       <View style={styles.searchContainer}>
@@ -34,11 +33,14 @@ const UserPostsScreen = () => {
         </View>
       </View>
       <View style={styles.cardContainer}>
-        <FlatList
-          style={styles.listStyle}
-          data={data}
-          renderItem={() => <Post />}
-        />
+        {userPosts.length > 0 && (
+          <FlatList
+            style={styles.listStyle}
+            data={userPosts}
+            renderItem={(data) => <Post item={data.item} />}
+            keyExtractor={(item) => item.id}
+          />
+        )}
       </View>
     </View>
   );
@@ -50,6 +52,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "#eee",
+    paddingBottom: 45,
   },
   listStyle: {
     padding: 10,
