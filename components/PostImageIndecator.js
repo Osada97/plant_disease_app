@@ -5,7 +5,7 @@ const PostImageIndecator = ({ slide, scrollX }) => {
   const windowWidth = Dimensions.get("window").width;
   const width = windowWidth * 0.94;
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={[styles.indContainer, { flexDirection: "row" }]}>
       {slide.map((_, i) => {
         const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
 
@@ -29,6 +29,11 @@ const PostImageIndecator = ({ slide, scrollX }) => {
 export default PostImageIndecator;
 
 const styles = StyleSheet.create({
+  indContainer: {
+    backgroundColor: "#00000078",
+    padding: 2,
+    borderRadius: 50,
+  },
   dot: {
     height: 10,
     borderRadius: 5,

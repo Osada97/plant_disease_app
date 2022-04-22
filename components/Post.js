@@ -7,34 +7,64 @@ import {
   FlatList,
   Dimensions,
   Animated,
+  TouchableOpacity,
 } from "react-native";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 import { API_KEY } from "@env";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import PostImageIndecator from "./PostImageIndecator";
-
-const DATA = [
-  {
-    id: 1,
-    uri: "../assets/jpgs/earlyBlight.jpg",
-  },
-  {
-    id: 2,
-    uri: "../assets/jpgs/earlyBlight.jpg",
-  },
-  {
-    id: 3,
-    uri: "../assets/jpgs/earlyBlight.jpg",
-  },
-];
+import Axios from "axios";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 
-const Post = ({ item }) => {
+const Post = ({ item, setIsRefresh, isRefresh }) => {
+  const [postImages, setPostImages] = useState([]);
   const navigation = useNavigation();
+  const { token } = useSelector((state) => state.user);
+
+  //take images
+  useEffect(() => {
+    getImages();
+  }, [item]);
+
+  const getImages = () => {
+    if (item.images.length > 0) {
+      setPostImages([...item.images]);
+    } else {
+      const imgObg = {
+        image_name: item.default_image,
+      };
+      setPostImages([imgObg]);
+    }
+  };
+
+  const addUpVote = () => {
+    if (token) {
+      Axios.post(`${API_KEY}/community/addvote/${item.id}`, "", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then(() => setIsRefresh(!isRefresh))
+        .catch((err) => console.log(err.response.data));
+    }
+  };
+  const addDownVote = () => {
+    if (token) {
+      Axios.post(`${API_KEY}/community/adddownvote/${item.id}`, "", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then(() => setIsRefresh(!isRefresh))
+        .catch((err) => console.log(err.response.data));
+    }
+  };
+
   const navigateToPost = () => {
     navigation.navigate("post");
   };
@@ -44,19 +74,20 @@ const Post = ({ item }) => {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
-    <Pressable style={styles.card} /*onPress={() => navigateToPost()}*/>
+    <Pressable style={styles.card} onPress={() => navigateToPost()}>
       <View style={styles.imageSection}>
         <FlatList
-          data={DATA}
-          renderItem={() => (
+          data={postImages}
+          renderItem={({ item }) => (
             <View style={styles.imageSectio}>
               <Image
                 style={styles.image}
-                source={require("../assets/jpgs/earlyBlight.jpg")}
+                source={{ uri: `${API_KEY}/${item.image_name}` }}
                 resizeMode="cover"
               />
             </View>
           )}
+          keyExtractor={(_, index) => index}
           horizontal
           pagingEnabled
           contentContainerStyle={{ alignItems: "center" }}
@@ -70,10 +101,13 @@ const Post = ({ item }) => {
           viewabilityConfig={viewConfig}
           scrollEventThrottle={32}
           res={slideRef}
+          scrollEnabled={postImages.length > 1 ? true : false}
         />
-        <View style={styles.indicator}>
-          <PostImageIndecator slide={DATA} scrollX={scrollX} />
-        </View>
+        {postImages.length > 1 && (
+          <View style={styles.indicator}>
+            <PostImageIndecator slide={postImages} scrollX={scrollX} />
+          </View>
+        )}
       </View>
 
       <View style={styles.contentSection}>
@@ -96,7 +130,7 @@ const Post = ({ item }) => {
         </View>
 
         <View style={styles.social}>
-          <View style={styles.sec}>
+          <TouchableOpacity style={styles.sec} onPress={addUpVote}>
             <FontAwesomeIcon
               icon={faThumbsUp}
               size={22}
@@ -105,8 +139,8 @@ const Post = ({ item }) => {
             <Text style={styles.lkText}>
               {item.up_vote_count !== 0 ? item.up_vote_count : "Upvote"}
             </Text>
-          </View>
-          <View style={styles.sec}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.sec} onPress={addDownVote}>
             <FontAwesomeIcon
               icon={faThumbsDown}
               size={22}
@@ -115,7 +149,7 @@ const Post = ({ item }) => {
             <Text style={styles.lkText}>
               {item.down_vote_count !== 0 ? item.down_vote_count : "Downvote"}
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </Pressable>
@@ -153,7 +187,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: "5%",
     left: "50%",
-    transform: [{ translateX: -50 }, { translateY: -5 }],
   },
   contentSection: {
     flex: 0.5,

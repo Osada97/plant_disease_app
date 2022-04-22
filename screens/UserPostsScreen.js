@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 
 const UserPostsScreen = () => {
   const [userPosts, setUserPosts] = useState([]);
+  const [isRefresh, setIsRefresh] = useState(false);
   const { token, userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -19,7 +20,7 @@ const UserPostsScreen = () => {
     })
       .then((res) => setUserPosts([...res.data]))
       .catch((err) => console.log(err));
-  }, []);
+  }, [isRefresh]);
 
   return (
     <View style={styles.screen}>
@@ -37,7 +38,13 @@ const UserPostsScreen = () => {
           <FlatList
             style={styles.listStyle}
             data={userPosts}
-            renderItem={(data) => <Post item={data.item} />}
+            renderItem={(data) => (
+              <Post
+                item={data.item}
+                setIsRefresh={setIsRefresh}
+                isRefresh={isRefresh}
+              />
+            )}
             keyExtractor={(item) => item.id}
           />
         )}
