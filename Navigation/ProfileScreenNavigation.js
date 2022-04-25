@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import UserProfile from "../screens/UserProfile";
 import UserStatus from "../utils/hook/UserStatus";
-import { useDispatch, useSelector } from "react-redux";
 import UserPostsScreen from "../screens/UserPostsScreen";
 import ProfileSettingsScreen from "../screens/ProfileSettingsScreen";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
@@ -12,7 +11,7 @@ import PostScreen from "../screens/PostScreen";
 
 const Stack = createNativeStackNavigator();
 
-const ProfileScreenNavigation = ({ navigation }) => {
+const ProfileScreenNavigation = ({ route, navigation }) => {
   const { loadUserDetails } = UserStatus();
 
   useEffect(() => {
@@ -20,6 +19,12 @@ const ProfileScreenNavigation = ({ navigation }) => {
       loadUserDetails();
     });
   }, [navigation]);
+
+  useLayoutEffect(() => {
+    if (route.name !== "post") {
+      navigation.setOptions({ tabBarStyle: { display: "flex" } });
+    }
+  }, [route]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

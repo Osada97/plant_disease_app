@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import { View, TouchableHighlight, Image, TextInput } from "react-native";
 import Comment from "../components/Comment";
@@ -9,13 +9,16 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useFocusEffect } from "@react-navigation/native";
 
 const PostScreen = ({ navigation }) => {
-  useEffect(() => {
-    navigation.addListener("focus", () => {
-      navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
-    });
-  }, [navigation]);
+  useFocusEffect(
+    useCallback(() => {
+      navigation.addListener("focus", () => {
+        navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
+      });
+    }, [navigation])
+  );
 
   return (
     <>
