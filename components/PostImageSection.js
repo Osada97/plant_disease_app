@@ -9,6 +9,7 @@ import {
 import React, { useRef } from "react";
 import PostImageIndecator from "./PostImageIndecator";
 import { API_KEY } from "@env";
+import GlobalStyles from "../utils/GlobalStyles";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -45,6 +46,7 @@ const PostImageSection = ({ postImages }) => {
         scrollEventThrottle={32}
         res={slideRef}
         scrollEnabled={postImages.length > 1 ? true : false}
+        showsHorizontalScrollIndicator={false}
       />
       {postImages.length > 1 && (
         <View style={styles.indicator}>
@@ -67,12 +69,14 @@ const styles = StyleSheet.create({
   imageSectio: {
     width: windowWidth * 0.94,
     height: 230,
-    backgroundColor: "#000",
+    backgroundColor: GlobalStyles.mainColor,
+    borderRadius: 5,
+    overflow: "hidden",
   },
   image: {
     width: windowWidth * 0.94,
     height: 230,
-    opacity: 0.9,
+    opacity: 0.8,
   },
   indicator: {
     position: "absolute",

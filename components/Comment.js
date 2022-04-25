@@ -3,7 +3,7 @@ import GlobalStyles from "../utils/GlobalStyles";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-const Comment = () => {
+const Comment = ({ data }) => {
   return (
     <View style={styles.bottomSectionComment}>
       <View style={styles.row}>
@@ -15,17 +15,12 @@ const Comment = () => {
               style={styles.commentPic}
             />
             <View>
-              <Text style={styles.commentName}>Osada</Text>
+              <Text style={styles.commentName}>{data.user.first_name}</Text>
               <Text style={styles.commentDate}>2 Days</Text>
             </View>
           </View>
           <View style={styles.commentDetails}>
-            <Text style={styles.comment}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam
-              tenetur, commodi ullam voluptatum tempora tempore, ipsa debitis
-              hic maxime animi repudiandae atque. Distinctio aperiam id
-              veritatis, quaerat reprehenderit qui. Distinctio!
-            </Text>
+            <Text style={styles.comment}>{data.comment}</Text>
             <View style={styles.commentImageRow}>
               <View style={styles.commentImageSec}>
                 <Image
@@ -39,12 +34,24 @@ const Comment = () => {
         </View>
         <View style={styles.commentVoteCol}>
           <View style={styles.voteSec}>
-            <FontAwesomeIcon icon={faThumbsUp} size={18} color="#797e85" />
-            <Text style={styles.cmText}>Upvote</Text>
+            <FontAwesomeIcon
+              icon={faThumbsUp}
+              size={18}
+              color={data.isUpVoted ? "#1d917b" : "#797e85"}
+            />
+            <Text style={styles.cmText}>
+              {data.up_vote_count > 0 ? data.up_vote_count : "Upvote"}
+            </Text>
           </View>
           <View style={styles.voteSec}>
-            <FontAwesomeIcon icon={faThumbsDown} size={18} color="#797e85" />
-            <Text style={styles.cmText}>Downvote</Text>
+            <FontAwesomeIcon
+              icon={faThumbsDown}
+              size={18}
+              color={data.isDownVoted ? "#cf1754" : "#797e85"}
+            />
+            <Text style={styles.cmText}>
+              {data.down_vote_count > 0 ? data.down_vote_count : "Downvote"}
+            </Text>
           </View>
         </View>
       </View>

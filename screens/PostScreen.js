@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import { View, TouchableHighlight, Image, TextInput } from "react-native";
 import Comment from "../components/Comment";
@@ -10,8 +10,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useFocusEffect } from "@react-navigation/native";
+import { API_KEY } from "@env";
+import Axios from "axios";
+import { useSelector } from "react-redux";
 
-const PostScreen = ({ navigation }) => {
+const PostScreen = ({ route, navigation }) => {
+  const [postDetails, setPostDetails] = useState(null);
+
+  const { token } = useSelector((state) => state.user);
+  const { id } = route.params;
+
   useFocusEffect(
     useCallback(() => {
       navigation.addListener("focus", () => {
@@ -20,14 +28,35 @@ const PostScreen = ({ navigation }) => {
     }, [navigation])
   );
 
+  useEffect(() => {
+    if (token) {
+      Axios.get(`${API_KEY}/community/getonepost/${id}`, {
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then((res) => {
+          setPostDetails(res.data);
+        })
+        .catch((err) => console.log(err.response.data));
+    }
+  }, []);
+
   return (
     <>
       <ScrollView style={styles.screen}>
-        <PostViewSec />
-        <Comment />
-        <Comment />
+        {postDetails && (
+          <>
+            <PostViewSec postDetails={postDetails} />
+
+            {postDetails.comment.map((data) => (
+              <Comment key={data.id} data={data} />
+            ))}
+          </>
+        )}
       </ScrollView>
       <View style={styles.CommentSec}>
+        {postDetails && !postDetails.is_approve && (
+          <View style={styles.overlay}></View>
+        )}
         <View style={styles.imageRow}>
           <View style={styles.imageSec}>
             <Image
@@ -94,8 +123,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#eee",
   },
   CommentSec: {
+    position: "relative",
     backgroundColor: "#fff",
-    padding: 8,
   },
   addCommentSec: {
     width: "100%",
@@ -103,11 +132,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
-    paddingTop: 8,
+    padding: 8,
   },
   imageRow: {
     width: "100%",
     flexDirection: "row",
+    padding: 8,
   },
   imageSec: {
     width: 70,
@@ -141,6 +171,18 @@ const styles = StyleSheet.create({
   },
   sendSec: {
     flex: 0.1,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: 1,
+    backgroundColor: "#eee",
+    opacity: 0.5,
   },
   input: {
     borderColor: "#eee",

@@ -1,54 +1,71 @@
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
+import { API_KEY } from "@env";
+import PostImageSection from "./PostImageSection";
 
-const PostViewSec = () => {
+const PostViewSec = ({ postDetails }) => {
+  const { owner, images } = postDetails;
   return (
     <View style={styles.topContainerCard}>
       <View>
-        <View style={styles.imageContainer}>
-          <Image
-            source={require("../assets/jpgs/earlyBlight.jpg")}
-            resizeMode="cover"
-            style={styles.image}
-          />
-        </View>
+        <PostImageSection postImages={images} />
         <View style={styles.contentContainer}>
           <View style={styles.proPicSec}>
             <Image
-              source={require("../assets/jpgs/avatar.jpg")}
+              source={{ uri: `${API_KEY}/${owner.profile_picture}` }}
               style={styles.proPicImage}
             />
           </View>
           <View style={styles.detailsUser}>
-            <Text style={styles.name}>Osada Manohara Rathnayake</Text>
-            <Text style={styles.location}>Badulla</Text>
+            <Text style={styles.name}>{`${owner.first_name || ""} ${
+              owner.last_name || ""
+            }`}</Text>
+            <Text style={styles.location}>{owner.location || ""}</Text>
             <Text style={styles.time}>One Day Ago</Text>
           </View>
         </View>
       </View>
       <View>
         <View style={styles.content}>
-          <Text style={styles.title}>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo,
-            magnam.
-          </Text>
+          <Text style={styles.title}>{postDetails.post_title || ""}</Text>
           <Text style={styles.description}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit neque
-            laboriosam ullam porro ex odit?
+            {postDetails.description || ""}
           </Text>
         </View>
-        <View style={styles.BottomRow}>
-          <View style={styles.sec}>
-            <FontAwesomeIcon icon={faThumbsUp} size={22} color="#797e85" />
-            <Text style={styles.lkText}>Upvote</Text>
+        {postDetails.is_approve ? (
+          <View style={styles.BottomRow}>
+            <View style={styles.sec}>
+              <FontAwesomeIcon
+                icon={faThumbsUp}
+                size={22}
+                color={postDetails.isUpVoted ? "#1d917b" : "#797e85"}
+              />
+              <Text style={styles.lkText}>
+                {postDetails.up_vote_count !== 0
+                  ? postDetails.up_vote_count
+                  : "Upvote"}
+              </Text>
+            </View>
+            <View style={styles.sec}>
+              <FontAwesomeIcon
+                icon={faThumbsDown}
+                size={22}
+                color={postDetails.isDownVoted ? "#cf1754" : "#797e85"}
+              />
+              <Text style={styles.lkText}>
+                {postDetails.down_vote_count !== 0
+                  ? postDetails.down_vote_count
+                  : "Downvote"}
+              </Text>
+            </View>
           </View>
-          <View style={styles.sec}>
-            <FontAwesomeIcon icon={faThumbsDown} size={22} color="#797e85" />
-            <Text style={styles.lkText}>Downvote</Text>
+        ) : (
+          <View style={styles.textCont}>
+            <Text style={styles.textContText}>This Post Not Approved Yet</Text>
           </View>
-        </View>
+        )}
       </View>
     </View>
   );
@@ -63,13 +80,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 20,
-  },
-  imageContainer: {
-    width: "100%",
-    height: 250,
-    borderRadius: 10,
-    overflow: "hidden",
-    backgroundColor: GlobalStyles.mainColor,
   },
   image: {
     width: "100%",
@@ -125,6 +135,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 25,
     color: GlobalStyles.mainColor,
+    textTransform: "capitalize",
   },
   description: {
     fontFamily: GlobalStyles.customFonts,
@@ -149,5 +160,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: GlobalStyles.customFonts,
     marginLeft: 10,
+  },
+  textCont: {
+    width: "100%",
+    alignItems: "center",
+    padding: 5,
+  },
+  textContText: {
+    fontSize: 14,
+    fontFamily: GlobalStyles.mediumFonts,
   },
 });

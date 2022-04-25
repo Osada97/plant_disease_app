@@ -83,7 +83,7 @@ const Post = ({ item, setIsRefresh, isRefresh }) => {
   };
 
   const navigateToPost = () => {
-    navigation.navigate("post");
+    navigation.navigate("post", { id: item.id });
   };
 
   return (
