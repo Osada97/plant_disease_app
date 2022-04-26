@@ -47,8 +47,8 @@ const PostScreen = ({ route, navigation }) => {
           <>
             <PostViewSec postDetails={postDetails} />
 
-            {postDetails.comment.map((data) => (
-              <Comment key={data.id} data={data} />
+            {postDetails.comment.map((data, index) => (
+              <Comment key={index} data={data} />
             ))}
           </>
         )}

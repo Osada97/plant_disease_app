@@ -1,5 +1,17 @@
-import { View, Text, StyleSheet, Image } from "react-native";
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
+import { useState } from "react";
+import {
+  faThumbsUp,
+  faThumbsDown,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
 import { API_KEY } from "@env";
@@ -7,9 +19,11 @@ import PostImageSection from "./PostImageSection";
 
 const PostViewSec = ({ postDetails }) => {
   const { owner, images } = postDetails;
+  const [optionSec, setOptionSec] = useState(false);
+
   return (
     <View style={styles.topContainerCard}>
-      <View>
+      <View style={{ position: "relative" }}>
         <PostImageSection postImages={images} />
         <View style={styles.contentContainer}>
           <View style={styles.proPicSec}>
@@ -26,6 +40,38 @@ const PostViewSec = ({ postDetails }) => {
             <Text style={styles.time}>One Day Ago</Text>
           </View>
         </View>
+        <Pressable
+          style={[styles.infoContainer, optionSec && styles.overlay]}
+          onPress={() => setOptionSec(false)}
+        >
+          <Pressable
+            style={styles.info}
+            onPress={() => setOptionSec(!optionSec)}
+          >
+            <FontAwesomeIcon
+              icon={faEllipsisVertical}
+              size={20}
+              color={GlobalStyles.mainColor}
+            />
+          </Pressable>
+          {optionSec && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
+                ]}
+              >
+                <Text style={styles.buttonText}>Setting</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <Text style={[styles.buttonText, { color: "#cf1754" }]}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Pressable>
       </View>
       <View>
         <View style={styles.content}>
@@ -169,5 +215,40 @@ const styles = StyleSheet.create({
   textContText: {
     fontSize: 14,
     fontFamily: GlobalStyles.mediumFonts,
+  },
+  infoContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  overlay: {
+    width: "100%",
+    height: "100%",
+    alignItems: "flex-end",
+    zIndex: 1,
+  },
+  info: {
+    width: 28,
+    height: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    backgroundColor: "#eee",
+  },
+  buttonContainer: {
+    backgroundColor: "#f7f7f7",
+    marginTop: 10,
+    paddingVertical: 8,
+    width: 100,
+    borderRadius: 5,
+  },
+  button: {
+    paddingVertical: 3,
+  },
+  buttonText: {
+    fontFamily: GlobalStyles.customFonts,
+    fontSize: 15,
+    textAlign: "center",
+    color: "#575757",
   },
 });

@@ -1,16 +1,30 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
+import { useState } from "react";
 import GlobalStyles from "../utils/GlobalStyles";
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faThumbsUp,
+  faThumbsDown,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { API_KEY } from "@env";
 
 const Comment = ({ data }) => {
+  const [optionSec, setOptionSec] = useState(false);
   return (
     <View style={styles.bottomSectionComment}>
       <View style={styles.row}>
-        <View style={styles.commentCol}>
+        <View style={[styles.commentCol, { position: "relative" }]}>
           <View style={styles.colProfile}>
             <Image
-              source={require("../assets/jpgs/avatar.jpg")}
+              source={{ uri: `${API_KEY}/${data.user.profile_picture}` }}
               resizeMode="cover"
               style={styles.commentPic}
             />
@@ -22,15 +36,49 @@ const Comment = ({ data }) => {
           <View style={styles.commentDetails}>
             <Text style={styles.comment}>{data.comment}</Text>
             <View style={styles.commentImageRow}>
-              <View style={styles.commentImageSec}>
-                <Image
-                  source={require("../assets/jpgs/earlyBlight.jpg")}
-                  resizeMode="cover"
-                  style={styles.commentImage}
-                />
-              </View>
+              {data.default_image == null && (
+                <View style={styles.commentImageSec}>
+                  <Image
+                    source={require("../assets/jpgs/earlyBlight.jpg")}
+                    resizeMode="cover"
+                    style={styles.commentImage}
+                  />
+                </View>
+              )}
             </View>
           </View>
+          <Pressable
+            style={[styles.infoContainer, optionSec && styles.overlay]}
+            onPress={() => setOptionSec(false)}
+          >
+            <Pressable
+              style={styles.info}
+              onPress={() => setOptionSec(!optionSec)}
+            >
+              <FontAwesomeIcon
+                icon={faEllipsisVertical}
+                size={20}
+                color={GlobalStyles.mainColor}
+              />
+            </Pressable>
+            {optionSec && (
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
+                  ]}
+                >
+                  <Text style={styles.buttonText}>Setting</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                  <Text style={[styles.buttonText, { color: "#cf1754" }]}>
+                    Delete
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Pressable>
         </View>
         <View style={styles.commentVoteCol}>
           <View style={styles.voteSec}>
@@ -129,5 +177,40 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 130,
     borderRadius: 5,
+  },
+  infoContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  overlay: {
+    width: "100%",
+    height: "100%",
+    alignItems: "flex-end",
+    zIndex: 1,
+  },
+  info: {
+    width: 28,
+    height: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    backgroundColor: "#eee",
+  },
+  buttonContainer: {
+    backgroundColor: "#f7f7f7",
+    marginTop: 10,
+    paddingVertical: 8,
+    width: 100,
+    borderRadius: 5,
+  },
+  button: {
+    paddingVertical: 3,
+  },
+  buttonText: {
+    fontFamily: GlobalStyles.customFonts,
+    fontSize: 15,
+    textAlign: "center",
+    color: "#575757",
   },
 });
