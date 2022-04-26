@@ -15,9 +15,49 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { API_KEY } from "@env";
+import Axios from "axios";
+import { useSelector } from "react-redux";
 
-const Comment = ({ data }) => {
+const Comment = ({ data, setIsRefresh, isRefresh }) => {
   const [optionSec, setOptionSec] = useState(false);
+  const { token } = useSelector((state) => state.user);
+
+  const addUpVote = () => {
+    if (!data.isUpVoted) {
+      Axios.post(`${API_KEY}/community/comment/upvote/${data.id}`, "", {
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then(() => setIsRefresh(!isRefresh))
+        .catch((err) => console.log(err.response.data));
+    } else {
+      Axios.delete(`${API_KEY}/community/comment/removeupvote/${data.id}`, {
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then(() => setIsRefresh(!isRefresh))
+        .catch((err) => console.log(err.response.data));
+    }
+  };
+
+  const addDownVote = () => {
+    if (!data.isDownVoted) {
+      Axios.post(`${API_KEY}/community/comment/downvote/${data.id}`, "", {
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then(() => setIsRefresh(!isRefresh))
+        .catch((err) => console.log(err.response.data));
+    } else {
+      Axios.delete(
+        `${API_KEY}/community/comment/removedownvote/${data.id}`,
+
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
+        .then(() => setIsRefresh(!isRefresh))
+        .catch((err) => console.log(err.response.data));
+    }
+  };
+
   return (
     <View style={styles.bottomSectionComment}>
       <View style={styles.row}>
@@ -81,7 +121,7 @@ const Comment = ({ data }) => {
           </Pressable>
         </View>
         <View style={styles.commentVoteCol}>
-          <View style={styles.voteSec}>
+          <TouchableOpacity style={styles.voteSec} onPress={addUpVote}>
             <FontAwesomeIcon
               icon={faThumbsUp}
               size={18}
@@ -90,8 +130,8 @@ const Comment = ({ data }) => {
             <Text style={styles.cmText}>
               {data.up_vote_count > 0 ? data.up_vote_count : "Upvote"}
             </Text>
-          </View>
-          <View style={styles.voteSec}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.voteSec} onPress={addDownVote}>
             <FontAwesomeIcon
               icon={faThumbsDown}
               size={18}
@@ -100,7 +140,7 @@ const Comment = ({ data }) => {
             <Text style={styles.cmText}>
               {data.down_vote_count > 0 ? data.down_vote_count : "Downvote"}
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

@@ -53,7 +53,12 @@ const PostScreen = ({ route, navigation }) => {
             />
 
             {postDetails.comment.map((data, index) => (
-              <Comment key={index} data={data} />
+              <Comment
+                key={index}
+                data={data}
+                setIsRefresh={setIsRefresh}
+                isRefresh={isRefresh}
+              />
             ))}
           </>
         )}
