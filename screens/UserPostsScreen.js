@@ -6,10 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Axios from "axios";
 import { API_KEY } from "@env";
 import { useSelector } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
 
 const UserPostsScreen = () => {
   const [userPosts, setUserPosts] = useState([]);
   const [isRefresh, setIsRefresh] = useState(false);
+  const isFocused = useIsFocused();
   const { token, userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const UserPostsScreen = () => {
     })
       .then((res) => setUserPosts([...res.data]))
       .catch((err) => console.log(err));
-  }, [isRefresh]);
+  }, [isRefresh, isFocused]);
 
   return (
     <View style={styles.screen}>

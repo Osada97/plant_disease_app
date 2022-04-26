@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 
 const PostScreen = ({ route, navigation }) => {
   const [postDetails, setPostDetails] = useState(null);
+  const [isRefresh, setIsRefresh] = useState(false);
 
   const { token } = useSelector((state) => state.user);
   const { id } = route.params;
@@ -38,14 +39,18 @@ const PostScreen = ({ route, navigation }) => {
         })
         .catch((err) => console.log(err.response.data));
     }
-  }, []);
+  }, [isRefresh]);
 
   return (
     <>
       <ScrollView style={styles.screen}>
         {postDetails && (
           <>
-            <PostViewSec postDetails={postDetails} />
+            <PostViewSec
+              postDetails={postDetails}
+              setIsRefresh={setIsRefresh}
+              isRefresh={isRefresh}
+            />
 
             {postDetails.comment.map((data, index) => (
               <Comment key={index} data={data} />
@@ -120,6 +125,7 @@ export default PostScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    paddingTop: 5,
     backgroundColor: "#eee",
   },
   CommentSec: {

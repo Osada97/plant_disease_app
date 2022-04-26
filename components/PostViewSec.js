@@ -7,17 +7,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useState } from "react";
-import {
-  faThumbsUp,
-  faThumbsDown,
-  faEllipsisVertical,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
 import { API_KEY } from "@env";
 import PostImageSection from "./PostImageSection";
+import VoteSection from "./VoteSection";
 
-const PostViewSec = ({ postDetails }) => {
+const PostViewSec = ({ postDetails, setIsRefresh, isRefresh }) => {
   const { owner, images } = postDetails;
   const [optionSec, setOptionSec] = useState(false);
 
@@ -81,32 +78,11 @@ const PostViewSec = ({ postDetails }) => {
           </Text>
         </View>
         {postDetails.is_approve ? (
-          <View style={styles.BottomRow}>
-            <View style={styles.sec}>
-              <FontAwesomeIcon
-                icon={faThumbsUp}
-                size={22}
-                color={postDetails.isUpVoted ? "#1d917b" : "#797e85"}
-              />
-              <Text style={styles.lkText}>
-                {postDetails.up_vote_count !== 0
-                  ? postDetails.up_vote_count
-                  : "Upvote"}
-              </Text>
-            </View>
-            <View style={styles.sec}>
-              <FontAwesomeIcon
-                icon={faThumbsDown}
-                size={22}
-                color={postDetails.isDownVoted ? "#cf1754" : "#797e85"}
-              />
-              <Text style={styles.lkText}>
-                {postDetails.down_vote_count !== 0
-                  ? postDetails.down_vote_count
-                  : "Downvote"}
-              </Text>
-            </View>
-          </View>
+          <VoteSection
+            postDetails={postDetails}
+            setIsRefresh={setIsRefresh}
+            isRefresh={isRefresh}
+          />
         ) : (
           <View style={styles.textCont}>
             <Text style={styles.textContText}>This Post Not Approved Yet</Text>
@@ -189,23 +165,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: 8,
     color: GlobalStyles.secondaryColor,
-  },
-  BottomRow: {
-    marginTop: 20,
-    flexDirection: "row",
-    borderTopColor: GlobalStyles.secondaryColor,
-    borderTopWidth: 1,
-    paddingVertical: 15,
-    justifyContent: "space-around",
-  },
-  sec: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  lkText: {
-    fontSize: 15,
-    fontFamily: GlobalStyles.customFonts,
-    marginLeft: 10,
   },
   textCont: {
     width: "100%",
