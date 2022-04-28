@@ -20,7 +20,7 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh }) => {
 
   return (
     <View style={styles.topContainerCard}>
-      <View style={{ position: "relative" }}>
+      <View>
         <PostImageSection postImages={images} />
         <View style={styles.contentContainer}>
           <View style={styles.proPicSec}>
@@ -37,38 +37,6 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh }) => {
             <Text style={styles.time}>One Day Ago</Text>
           </View>
         </View>
-        <Pressable
-          style={[styles.infoContainer, optionSec && styles.overlay]}
-          onPress={() => setOptionSec(false)}
-        >
-          <Pressable
-            style={styles.info}
-            onPress={() => setOptionSec(!optionSec)}
-          >
-            <FontAwesomeIcon
-              icon={faEllipsisVertical}
-              size={20}
-              color={GlobalStyles.mainColor}
-            />
-          </Pressable>
-          {optionSec && (
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
-                ]}
-              >
-                <Text style={styles.buttonText}>Setting</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button}>
-                <Text style={[styles.buttonText, { color: "#cf1754" }]}>
-                  Delete
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </Pressable>
       </View>
       <View>
         <View style={styles.content}>
@@ -89,6 +57,35 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh }) => {
           </View>
         )}
       </View>
+      <Pressable
+        style={[styles.infoContainer, optionSec && styles.overlay]}
+        onPress={() => setOptionSec(false)}
+      >
+        <Pressable style={styles.info} onPress={() => setOptionSec(!optionSec)}>
+          <FontAwesomeIcon
+            icon={faEllipsisVertical}
+            size={20}
+            color={GlobalStyles.mainColor}
+          />
+        </Pressable>
+        {optionSec && (
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
+              ]}
+            >
+              <Text style={styles.buttonText}>Setting</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Text style={[styles.buttonText, { color: "#cf1754" }]}>
+                Delete
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </Pressable>
     </View>
   );
 };
@@ -102,6 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 20,
+    position: "relative",
   },
   image: {
     width: "100%",
@@ -177,12 +175,12 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: "absolute",
-    top: 10,
-    right: 10,
+    top: 20,
+    right: 20,
   },
   overlay: {
-    width: "100%",
-    height: "100%",
+    width: "98%",
+    height: "98%",
     alignItems: "flex-end",
     zIndex: 1,
   },

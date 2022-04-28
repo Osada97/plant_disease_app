@@ -58,10 +58,18 @@ const Comment = ({ data, setIsRefresh, isRefresh }) => {
     }
   };
 
+  const deleteComment = (id) => {
+    Axios.delete(`${API_KEY}/community/comment/delete/${id}`, {
+      headers: { Authorization: "Bearer " + token },
+    })
+      .then(() => setIsRefresh(!isRefresh))
+      .catch((err) => console.log(err.response.data));
+  };
+
   return (
     <View style={styles.bottomSectionComment}>
       <View style={styles.row}>
-        <View style={[styles.commentCol, { position: "relative" }]}>
+        <View style={styles.commentCol}>
           <View style={styles.colProfile}>
             <Image
               source={{ uri: `${API_KEY}/${data.user.profile_picture}` }}
@@ -76,49 +84,19 @@ const Comment = ({ data, setIsRefresh, isRefresh }) => {
           <View style={styles.commentDetails}>
             <Text style={styles.comment}>{data.comment}</Text>
             <View style={styles.commentImageRow}>
-              {data.default_image == null && (
-                <View style={styles.commentImageSec}>
-                  <Image
-                    source={require("../assets/jpgs/earlyBlight.jpg")}
-                    resizeMode="cover"
-                    style={styles.commentImage}
-                  />
-                </View>
-              )}
+              {data.default_image == null &&
+                data.image.length > 0 &&
+                data.image.map((data) => (
+                  <View style={styles.commentImageSec} key={data.id}>
+                    <Image
+                      source={{ uri: `${API_KEY}/${data.image_name}` }}
+                      resizeMode="cover"
+                      style={styles.commentImage}
+                    />
+                  </View>
+                ))}
             </View>
           </View>
-          <Pressable
-            style={[styles.infoContainer, optionSec && styles.overlay]}
-            onPress={() => setOptionSec(false)}
-          >
-            <Pressable
-              style={styles.info}
-              onPress={() => setOptionSec(!optionSec)}
-            >
-              <FontAwesomeIcon
-                icon={faEllipsisVertical}
-                size={20}
-                color={GlobalStyles.mainColor}
-              />
-            </Pressable>
-            {optionSec && (
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={[
-                    styles.button,
-                    { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
-                  ]}
-                >
-                  <Text style={styles.buttonText}>Setting</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={[styles.buttonText, { color: "#cf1754" }]}>
-                    Delete
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </Pressable>
         </View>
         <View style={styles.commentVoteCol}>
           <TouchableOpacity style={styles.voteSec} onPress={addUpVote}>
@@ -142,6 +120,41 @@ const Comment = ({ data, setIsRefresh, isRefresh }) => {
             </Text>
           </TouchableOpacity>
         </View>
+        <Pressable
+          style={[styles.infoContainer, optionSec && styles.overlay]}
+          onPress={() => setOptionSec(false)}
+        >
+          <Pressable
+            style={styles.info}
+            onPress={() => setOptionSec(!optionSec)}
+          >
+            <FontAwesomeIcon
+              icon={faEllipsisVertical}
+              size={20}
+              color={GlobalStyles.mainColor}
+            />
+          </Pressable>
+          {optionSec && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
+                ]}
+              >
+                <Text style={styles.buttonText}>Setting</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => deleteComment(data.id)}
+              >
+                <Text style={[styles.buttonText, { color: "#cf1754" }]}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Pressable>
       </View>
     </View>
   );
@@ -153,6 +166,7 @@ const styles = StyleSheet.create({
   bottomSectionComment: {
     paddingVertical: 5,
     paddingHorizontal: 20,
+    position: "relative",
   },
   row: {
     width: "100%",
