@@ -5,8 +5,9 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GlobalStyles from "../utils/GlobalStyles";
 import {
   faThumbsUp,
@@ -18,8 +19,20 @@ import { API_KEY } from "@env";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 
-const Comment = ({ data, setIsRefresh, isRefresh }) => {
+const Comment = ({
+  data,
+  setIsRefresh,
+  isRefresh,
+  setImages,
+  images,
+  setComment,
+  comment,
+  isEdit,
+  setIsEdit,
+  setCommentId,
+}) => {
   const [optionSec, setOptionSec] = useState(false);
+
   const { token } = useSelector((state) => state.user);
 
   const addUpVote = () => {
@@ -59,11 +72,42 @@ const Comment = ({ data, setIsRefresh, isRefresh }) => {
   };
 
   const deleteComment = (id) => {
-    Axios.delete(`${API_KEY}/community/comment/delete/${id}`, {
-      headers: { Authorization: "Bearer " + token },
-    })
-      .then(() => setIsRefresh(!isRefresh))
-      .catch((err) => console.log(err.response.data));
+    Alert.alert("Delete", "Are you sure you want to delete this comment?", [
+      { text: "Cancel" },
+      {
+        text: "Delete",
+        onPress: () => {
+          Axios.delete(`${API_KEY}/community/comment/delete/${id}`, {
+            headers: { Authorization: "Bearer " + token },
+          })
+            .then(() => setIsRefresh(!isRefresh))
+            .catch((err) => console.log(err.response.data));
+        },
+      },
+    ]);
+  };
+
+  const editComment = (id, comment, image) => {
+    //set data
+    setCommentId(id);
+    setIsEdit(true);
+    setComment({ comment: comment });
+    setOptionSec(false);
+    setImage(image);
+  };
+
+  const setImage = (image) => {
+    let obj = [];
+    if (images.length < 2) {
+      for (const img of image) {
+        obj.push({
+          id: img.id,
+          edited: true,
+          uri: img.image_name,
+        });
+      }
+      setImages([...obj]);
+    }
   };
 
   return (
@@ -141,8 +185,9 @@ const Comment = ({ data, setIsRefresh, isRefresh }) => {
                   styles.button,
                   { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
                 ]}
+                onPress={() => editComment(data.id, data.comment, data.image)}
               >
-                <Text style={styles.buttonText}>Setting</Text>
+                <Text style={styles.buttonText}>Edit</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.button}
@@ -173,6 +218,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 15,
+    borderColor: "#cfe3da",
+    borderWidth: 1,
   },
   commentPic: {
     width: 50,

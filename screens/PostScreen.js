@@ -11,6 +11,10 @@ import BottomAddCommentSection from "../components/BottomAddCommentSection";
 const PostScreen = ({ route, navigation }) => {
   const [postDetails, setPostDetails] = useState(null);
   const [isRefresh, setIsRefresh] = useState(false);
+  const [images, setImages] = useState([]);
+  const [comment, setComment] = useState({ comment: "" });
+  const [isEdit, setIsEdit] = useState(false);
+  const [commentId, setCommentId] = useState(null);
 
   const { token } = useSelector((state) => state.user);
   const { id } = route.params;
@@ -52,6 +56,13 @@ const PostScreen = ({ route, navigation }) => {
                 data={data}
                 setIsRefresh={setIsRefresh}
                 isRefresh={isRefresh}
+                setImages={setImages}
+                images={images}
+                setComment={setComment}
+                comment={comment}
+                setIsEdit={setIsEdit}
+                isEdit={isEdit}
+                setCommentId={setCommentId}
               />
             ))}
           </>
@@ -61,6 +72,13 @@ const PostScreen = ({ route, navigation }) => {
         postDetails={postDetails}
         setIsRefresh={setIsRefresh}
         isRefresh={isRefresh}
+        setImages={setImages}
+        images={images}
+        setComment={setComment}
+        comment={comment}
+        setIsEdit={setIsEdit}
+        isEdit={isEdit}
+        commentId={commentId}
       />
     </>
   );
@@ -72,6 +90,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     paddingTop: 5,
-    backgroundColor: "#eee",
+    backgroundColor: "#edf7f3",
   },
 });

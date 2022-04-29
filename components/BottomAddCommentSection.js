@@ -23,9 +23,18 @@ import { API_KEY } from "@env";
 import { useSelector } from "react-redux";
 import * as mime from "react-native-mime-types";
 
-const BottomAddCommentSection = ({ postDetails, setIsRefresh, isRefresh }) => {
-  const [images, setImages] = useState([]);
-  const [comment, setComment] = useState({ comment: "" });
+const BottomAddCommentSection = ({
+  postDetails,
+  setIsRefresh,
+  isRefresh,
+  setImages,
+  images,
+  setComment,
+  comment,
+  setIsEdit,
+  isEdit,
+  commentId,
+}) => {
   const [errors, setErrors] = useState({ comment: "" });
   const [isModel, setIsModel] = useState(false);
   const { token, userDetails } = useSelector((state) => state.user);
@@ -64,8 +73,36 @@ const BottomAddCommentSection = ({ postDetails, setIsRefresh, isRefresh }) => {
   };
 
   const removeImage = (index) => {
-    const im = images.filter((data) => images.indexOf(data) !== index);
-    setImages([...im]);
+    //delete image in edit mode
+    const imageDetails = images[index];
+
+    if (imageDetails.edited !== undefined) {
+      Alert.alert("Delete Image", "Do you want to delete image on comment", [
+        { text: "Cancel" },
+        {
+          text: "Delete",
+          onPress: () => {
+            Axios.delete(
+              `${API_KEY}/community/comment/removeimage/${imageDetails.id}`,
+              {
+                headers: { Authorization: "Bearer " + token },
+              }
+            )
+              .then(() => {
+                const im = images.filter(
+                  (data) => images.indexOf(data) !== index
+                );
+                setImages([...im]);
+                setIsRefresh(!isRefresh);
+              })
+              .catch((err) => console.log(err.response.data));
+          },
+        },
+      ]);
+    } else {
+      const im = images.filter((data) => images.indexOf(data) !== index);
+      setImages([...im]);
+    }
   };
 
   const addComment = (name, value) => {
@@ -78,7 +115,14 @@ const BottomAddCommentSection = ({ postDetails, setIsRefresh, isRefresh }) => {
         ...errors,
         comment: "There is Nothing to add as a comment",
       });
-      setIsModel(true);
+      if (isEdit) {
+        Alert.alert("Edit", "Do you want to leave edit mode?", [
+          { text: "Cancel" },
+          { text: "Leave", onPress: () => setIsEdit(false) },
+        ]);
+      } else {
+        setIsModel(true);
+      }
       return;
     }
     if (comment.comment.length > 500) {
@@ -90,8 +134,75 @@ const BottomAddCommentSection = ({ postDetails, setIsRefresh, isRefresh }) => {
       return;
     }
 
-    Axios.post(
-      `${API_KEY}/community/comment/create/${postDetails.id}`,
+    if (!isEdit) {
+      Axios.post(
+        `${API_KEY}/community/comment/create/${postDetails.id}`,
+        {
+          comment: comment.comment,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+        .then((res) => {
+          Keyboard.dismiss();
+          setComment({ comment: "" });
+          if (images.length > 0) {
+            imageUpload(res.data);
+          } else {
+            setIsRefresh(!isRefresh);
+          }
+        })
+        .catch((err) => console.log(err.response.data));
+    } else {
+      editComment();
+    }
+  };
+
+  const imageUpload = async (res) => {
+    let formData = new FormData();
+
+    for (const image of images) {
+      const split = image.uri.split("/");
+      const filenameWithExt = split[split.length - 1];
+      const mimeType = mime.lookup(filenameWithExt);
+
+      if (image.edited === undefined) {
+        formData.append("file", {
+          uri: image.uri,
+          name: filenameWithExt,
+          type: mimeType,
+        });
+
+        let result = await fetch(
+          `${API_KEY}/community/comment/addimage/${res.id}`,
+          {
+            method: "post",
+            body: formData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+
+        let responseJson = await result.json();
+
+        if (responseJson) {
+          setIsRefresh(!isRefresh);
+          setImages([]);
+        }
+      }
+    }
+    setIsRefresh(!isRefresh);
+    setImages([]);
+  };
+
+  const editComment = () => {
+    Axios.put(
+      `${API_KEY}/community/comment/update/${commentId}`,
       {
         comment: comment.comment,
       },
@@ -103,49 +214,14 @@ const BottomAddCommentSection = ({ postDetails, setIsRefresh, isRefresh }) => {
     )
       .then((res) => {
         Keyboard.dismiss();
-        setIsRefresh(!isRefresh);
         setComment({ comment: "" });
         if (images.length > 0) {
           imageUpload(res.data);
+        } else {
+          setIsRefresh(!isRefresh);
         }
       })
       .catch((err) => console.log(err.response.data));
-  };
-
-  const imageUpload = async (res) => {
-    let formData = new FormData();
-
-    for (const image of images) {
-      const split = image.uri.split("/");
-      const filenameWithExt = split[split.length - 1];
-      const mimeType = mime.lookup(filenameWithExt);
-
-      formData.append("file", {
-        uri: image.uri,
-        name: filenameWithExt,
-        type: mimeType,
-      });
-
-      let result = await fetch(
-        `${API_KEY}/community/comment/addimage/${res.id}`,
-        {
-          method: "post",
-          body: formData,
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-
-      let responseJson = await result.json();
-
-      console.log(responseJson);
-      if (responseJson) {
-        setImages([]);
-        setIsRefresh(!isRefresh);
-      }
-    }
   };
 
   return (
@@ -166,7 +242,9 @@ const BottomAddCommentSection = ({ postDetails, setIsRefresh, isRefresh }) => {
           {images.map((data, index) => (
             <View key={index} style={styles.imageSec}>
               <Image
-                source={{ uri: data.uri }}
+                source={{
+                  uri: data.edited ? `${API_KEY}/${data.uri}` : data.uri,
+                }}
                 resizeMode="cover"
                 style={styles.image}
               />
@@ -213,6 +291,11 @@ const styles = StyleSheet.create({
   CommentSec: {
     position: "relative",
     backgroundColor: "#fff",
+    borderTopColor: "#cfe3da",
+    borderTopWidth: 1,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    overflow: "hidden",
   },
   addCommentSec: {
     width: "100%",
