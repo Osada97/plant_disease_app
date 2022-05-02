@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GlobalStyles from "../utils/GlobalStyles";
 import {
   faThumbsUp,
@@ -26,8 +26,6 @@ const Comment = ({
   setImages,
   images,
   setComment,
-  comment,
-  isEdit,
   setIsEdit,
   setCommentId,
 }) => {

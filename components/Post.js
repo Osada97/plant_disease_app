@@ -108,8 +108,11 @@ const Post = ({ item, setIsRefresh, isRefresh }) => {
                 styles.button,
                 { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
               ]}
+              onPress={() =>
+                navigation.navigate("postSetting", { id: item.id })
+              }
             >
-              <Text style={styles.buttonText}>Setting</Text>
+              <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
               <Text style={[styles.buttonText, { color: "#cf1754" }]}>
