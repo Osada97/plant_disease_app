@@ -41,8 +41,8 @@ export default function ValidateSignUp(values) {
   if (values.password.trim().length <= 3) {
     formErrors.password = "Password should be More Than 3 Characters";
   }
-  if (values.password.trim().length > 8) {
-    formErrors.password = "Password should be Less Than 8 Characters";
+  if (values.password.trim().length > 16) {
+    formErrors.password = "Password should be Less Than 16 Characters";
   }
   if (values.confirmPassword.trim().length === 0) {
     formErrors.confirmPassword = "Please Enter Confirm Password";
