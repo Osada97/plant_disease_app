@@ -1,16 +1,9 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableHighlight,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import GlobalStyles from "../utils/GlobalStyles";
 import ChangePasswordForm from "../components/ChangePasswordForm";
 
-const ChangePasswordScreen = () => {
+const ChangePasswordScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <View style={styles.imageSec}>
@@ -25,7 +18,7 @@ const ChangePasswordScreen = () => {
         <Text style={styles.formSubText}>
           Your new password must be different from previous used password.
         </Text>
-        <ChangePasswordForm />
+        <ChangePasswordForm navigation={navigation} />
       </View>
     </View>
   );
@@ -39,7 +32,7 @@ const styles = StyleSheet.create({
     position: "relative",
     backgroundColor: "#fff",
     padding: 20,
-    justifyContent: "flex-start",
+    justifyContent: "center",
   },
   imageSec: {
     alignItems: "center",
