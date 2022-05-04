@@ -7,6 +7,7 @@ import { API_KEY } from "@env";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import BottomAddCommentSection from "../components/BottomAddCommentSection";
+import GlobalStyles from "../utils/GlobalStyles";
 
 const PostScreen = ({ route, navigation }) => {
   const [postDetails, setPostDetails] = useState(null);
@@ -48,6 +49,7 @@ const PostScreen = ({ route, navigation }) => {
               postDetails={postDetails}
               setIsRefresh={setIsRefresh}
               isRefresh={isRefresh}
+              navigation={navigation}
             />
 
             {postDetails.comment.map((data, index) => (
@@ -90,6 +92,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     paddingTop: 5,
-    backgroundColor: "#edf7f3",
+    backgroundColor: GlobalStyles.backgroundColor,
   },
 });

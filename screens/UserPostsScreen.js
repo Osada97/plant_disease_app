@@ -7,6 +7,7 @@ import Axios from "axios";
 import { API_KEY } from "@env";
 import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
+import GlobalStyles from "../utils/GlobalStyles";
 
 const UserPostsScreen = () => {
   const [userPosts, setUserPosts] = useState([]);
@@ -60,7 +61,7 @@ export default UserPostsScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#eee",
+    backgroundColor: GlobalStyles.backgroundColor,
     paddingBottom: 45,
   },
   listStyle: {

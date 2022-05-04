@@ -218,7 +218,7 @@ const PostSettingScreen = ({ route }) => {
           </View>
         )}
         <View style={styles.form}>
-          <View>
+          <View style={styles.formRow}>
             <Text style={styles.label}>Your question to the community</Text>
             <TextInput
               style={styles.input}
@@ -227,7 +227,7 @@ const PostSettingScreen = ({ route }) => {
               onChangeText={(text) => setPostValue(text, "title")}
             />
           </View>
-          <View>
+          <View style={styles.formRow}>
             <Text style={styles.label}>Description of your plant</Text>
             <TextInput
               style={styles.input}
@@ -264,6 +264,9 @@ const styles = StyleSheet.create({
   form: {
     marginTop: 15,
     padding: 10,
+  },
+  formRow: {
+    marginBottom: 10,
   },
   label: {
     fontFamily: GlobalStyles.customFonts,

@@ -14,7 +14,7 @@ import { API_KEY } from "@env";
 import PostImageSection from "./PostImageSection";
 import VoteSection from "./VoteSection";
 
-const PostViewSec = ({ postDetails, setIsRefresh, isRefresh }) => {
+const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
   const { owner, images } = postDetails;
   const [optionSec, setOptionSec] = useState(false);
 
@@ -75,8 +75,11 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh }) => {
                 styles.button,
                 { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
               ]}
+              onPress={() =>
+                navigation.navigate("postSetting", { id: postDetails.id })
+              }
             >
-              <Text style={styles.buttonText}>Setting</Text>
+              <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
               <Text style={[styles.buttonText, { color: "#cf1754" }]}>
