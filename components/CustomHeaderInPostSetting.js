@@ -47,7 +47,7 @@ const CustomHeaderInPostSetting = ({ setImage, image, editComment }) => {
 
   return (
     <View style={styles.customHeader}>
-      <Text style={styles.headerText}>Edit Your Post</Text>
+      <Text style={styles.headerText}>Edit Your Question</Text>
       <View style={styles.headerButtons}>
         <TouchableOpacity onPress={addImageButton}>
           <FontAwesomeIcon

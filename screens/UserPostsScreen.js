@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, TextInput } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import Post from "../components/Post";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Axios from "axios";
 import { API_KEY } from "@env";
@@ -9,7 +16,7 @@ import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import GlobalStyles from "../utils/GlobalStyles";
 
-const UserPostsScreen = () => {
+const UserPostsScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
   const [isRefresh, setIsRefresh] = useState(false);
   const isFocused = useIsFocused();
@@ -52,6 +59,14 @@ const UserPostsScreen = () => {
           />
         )}
       </View>
+      {/* add post section */}
+      <TouchableOpacity
+        style={styles.addSection}
+        onPress={() => navigation.navigate("postAdd")}
+      >
+        <FontAwesomeIcon icon={faPen} size={18} color="#fff" />
+        <Text style={styles.addSectionText}>Ask Question</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -85,5 +100,20 @@ const styles = StyleSheet.create({
     width: "93%",
     backgroundColor: "#fff",
     marginLeft: 5,
+  },
+  addSection: {
+    position: "absolute",
+    bottom: 10,
+    right: 20,
+    width: 150,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: GlobalStyles.mainColor,
+    padding: 15,
+    borderRadius: 15,
+  },
+  addSectionText: {
+    fontFamily: GlobalStyles.mediumFonts,
+    color: "#fff",
   },
 });

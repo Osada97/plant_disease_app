@@ -1,36 +1,13 @@
-import { View, Text } from "react-native";
 import { useEffect, useState } from "react";
 
-const PostEditHook = (details, setImage, handelSubmit) => {
+const AddPostHook = (handelSubmit, image, setImage) => {
   const [values, setValues] = useState({
     title: "",
     description: "",
   });
-  const [isModel, setIsModel] = useState(false);
   const [checkError, setCheckError] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const [errors, setErrors] = useState({ title: "", comment: "" });
-
-  useEffect(() => {
-    setValues({
-      ...values,
-      ...{ title: details.post_title, description: details.description },
-    });
-
-    //set the previous added images
-    if (details.images) {
-      let arr = [];
-
-      for (const img of details.images) {
-        arr.push({
-          id: img.id,
-          edited: true,
-          uri: img.image_name,
-        });
-      }
-      setImage([...arr]);
-    }
-  }, [details]);
 
   useEffect(() => {
     //check if there is an any errors and show the model
@@ -48,7 +25,18 @@ const PostEditHook = (details, setImage, handelSubmit) => {
     }
   }, [errors]);
 
-  const editComment = () => {
+  const setPostValue = (text, name) => {
+    //set textInput values
+    setValues({ ...values, [name]: text });
+  };
+
+  const removeImage = (index) => {
+    //removes newly added images
+    const im = image.filter((data) => image.indexOf(data) !== index);
+    setImage([...im]);
+  };
+
+  const addPost = () => {
     //validate data
     let postErrors = {};
 
@@ -75,12 +63,7 @@ const PostEditHook = (details, setImage, handelSubmit) => {
     setCheckError(!checkError);
     setIsSubmit(true);
   };
-  const setPostValue = (text, name) => {
-    //set textInput values
-    setValues({ ...values, [name]: text });
-  };
-
-  return { editComment, setPostValue, values, isModel, setIsModel, errors };
+  return { values, errors, addPost, removeImage, setPostValue };
 };
 
-export default PostEditHook;
+export default AddPostHook;

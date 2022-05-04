@@ -2,49 +2,31 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  Image,
   TextInput,
-  FlatList,
-  Animated,
-  Dimensions,
   Alert,
   Keyboard,
 } from "react-native";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
-import { useEffect, useRef, useState } from "react";
-import PostImageIndecator from "../components/PostImageIndecator";
-import CustomHeaderInPostSetting from "../components/CustomHeaderInPostSetting";
+import { useEffect, useState } from "react";
 import { API_KEY } from "@env";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import ErrorModel from "../utils/ErrorModel";
 import * as mime from "react-native-mime-types";
 import PostEditHook from "../utils/hook/PostEditHook";
+import CustomHeaderInPostSetting from "../components/CustomHeaderInPostSetting";
+import AddEditImageCoursoul from "../components/AddEditImageCoursoul";
 
-const windowWidth = Dimensions.get("window").width;
-
-const PostSettingScreen = ({ route }) => {
+const PostSettingScreen = ({ route, navigation }) => {
   const { id } = route.params;
   const [details, setDetails] = useState({});
-
   const [image, setImage] = useState([]);
-  const [isModel, setIsModel] = useState(false);
   const [isRefresh, setIsRefresh] = useState(false);
 
   const { token } = useSelector((state) => state.user);
 
-  const { editComment, setPostValue, values } = PostEditHook(
-    details,
-    setImage,
-    handelSubmit
-  );
-
-  const slideRef = useRef(null);
-  const scrollX = useRef(new Animated.Value(0)).current;
-  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+  const { editComment, setPostValue, values, isModel, setIsModel, errors } =
+    PostEditHook(details, setImage, handelSubmit);
 
   useEffect(() => {
     Axios.get(`${API_KEY}/community/getonepost/${id}`, {
@@ -110,9 +92,10 @@ const PostSettingScreen = ({ route }) => {
           imageUpload(res.data);
         } else {
           setIsRefresh(!isRefresh);
+          navigation.goBack();
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.data));
   }
 
   const imageUpload = async (res) => {
@@ -146,6 +129,7 @@ const PostSettingScreen = ({ route }) => {
 
         if (responseJson) {
           setIsRefresh(!isRefresh);
+          navigation.goBack();
         }
       }
     }
@@ -155,7 +139,7 @@ const PostSettingScreen = ({ route }) => {
     <View style={styles.screen}>
       {isModel && (
         <ErrorModel
-          title="Post Edit Failed"
+          title="Question Edit Failed"
           msg={errors}
           type="Error"
           setIsModel={setIsModel}
@@ -168,55 +152,9 @@ const PostSettingScreen = ({ route }) => {
       />
       <View style={styles.formContainer}>
         {image.length > 0 && (
-          <View style={styles.imageContainer}>
-            <FlatList
-              data={image}
-              renderItem={({ item, index }) => (
-                <View style={{ position: "relative" }}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: item.edited
-                        ? `${API_KEY}/${item.uri}`
-                        : `${item.uri}`,
-                    }}
-                    resizeMode="cover"
-                  />
-                  <View style={styles.imgSec}>
-                    <TouchableOpacity onPress={() => removeImage(index)}>
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        size={18}
-                        color={GlobalStyles.secondaryColor}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
-              keyExtractor={(_, index) => index}
-              horizontal
-              pagingEnabled
-              contentContainerStyle={{ alignItems: "center" }}
-              snapToInterval={windowWidth * 0.95}
-              decelerationRate={0}
-              bounces={false}
-              onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                { useNativeDriver: false }
-              )}
-              viewabilityConfig={viewConfig}
-              scrollEventThrottle={32}
-              res={slideRef}
-              scrollEnabled={image.length > 1 ? true : false}
-              showsHorizontalScrollIndicator={false}
-            />
-            {image.length > 1 && (
-              <View style={styles.indicator}>
-                <PostImageIndecator slide={image} scrollX={scrollX} />
-              </View>
-            )}
-          </View>
+          <AddEditImageCoursoul image={image} removeImage={removeImage} />
         )}
+
         <View style={styles.form}>
           <View style={styles.formRow}>
             <Text style={styles.label}>Your question to the community</Text>
@@ -234,6 +172,7 @@ const PostSettingScreen = ({ route }) => {
               placeholder="Describe specialities of your plant"
               value={values.description}
               onChangeText={(text) => setPostValue(text, "description")}
+              multiline
             />
           </View>
         </View>
@@ -248,18 +187,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  imageContainer: {
-    position: "relative",
-    width: windowWidth,
-    height: 250,
-    padding: 10,
-    backgroundColor: "#eee",
-  },
-  image: {
-    width: windowWidth * 0.95,
-    height: 250,
-    borderRadius: 10,
   },
   form: {
     marginTop: 15,
@@ -280,21 +207,5 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 14,
     color: GlobalStyles.secondaryColor,
-  },
-  indicator: {
-    position: "absolute",
-    bottom: "10%",
-    left: "50%",
-  },
-  imgSec: {
-    position: "absolute",
-    top: 20,
-    right: 10,
-    width: 35,
-    height: 35,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f7f7f7",
   },
 });
