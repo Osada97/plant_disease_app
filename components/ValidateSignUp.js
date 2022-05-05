@@ -35,20 +35,22 @@ export default function ValidateSignUp(values) {
   if (values.phoneNumber.trim().length > 10) {
     formErrors.phoneNumber = "Phone Number Should be Less Than 10 Numbers";
   }
-  if (values.password.trim().length === 0) {
-    formErrors.password = "Please Enter Password";
-  }
-  if (values.password.trim().length <= 3) {
-    formErrors.password = "Password should be More Than 3 Characters";
-  }
-  if (values.password.trim().length > 16) {
-    formErrors.password = "Password should be Less Than 16 Characters";
-  }
-  if (values.confirmPassword.trim().length === 0) {
-    formErrors.confirmPassword = "Please Enter Confirm Password";
-  } else {
-    if (values.password !== values.confirmPassword) {
-      formErrors.confirmPassword = "Confirm Password Invalid";
+  if (values.password) {
+    if (values.password.trim().length === 0) {
+      formErrors.password = "Please Enter Password";
+    }
+    if (values.password.trim().length <= 3) {
+      formErrors.password = "Password should be More Than 3 Characters";
+    }
+    if (values.password.trim().length > 16) {
+      formErrors.password = "Password should be Less Than 16 Characters";
+    }
+    if (values.confirmPassword.trim().length === 0) {
+      formErrors.confirmPassword = "Please Enter Confirm Password";
+    } else {
+      if (values.password !== values.confirmPassword) {
+        formErrors.confirmPassword = "Confirm Password Invalid";
+      }
     }
   }
 

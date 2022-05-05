@@ -1,37 +1,140 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import { useEffect, useState } from "react";
 import GlobalStyles from "../utils/GlobalStyles";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { API_KEY } from "@env";
 import UpdateProfileForm from "../components/UpdateProfileForm";
+import ValidateSignUp from "../components/ValidateSignUp";
+import ErrorModel from "../utils/ErrorModel";
+import Axios from "axios";
+import GetLocation from "../utils/GetLocation";
+import { setUserDetails } from "../actions/setUserDetails";
+import ProfileImageSec from "../components/ProfileImageSec";
+import * as mime from "react-native-mime-types";
 
-const ProfileSettingsScreen = () => {
-  const user = useSelector((state) => state.user.userDetails);
+const ProfileSettingsScreen = ({ navigation }) => {
+  const [proPic, setProPic] = useState("");
+  const [values, setValues] = useState({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    phoneNumber: "",
+  });
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    phoneNumber: "",
+  });
+  const [isModel, setIsModel] = useState(false);
+  const [checkError, setCheckError] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  const { token, userDetails } = useSelector((state) => state.user);
+  const { location } = GetLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    //check if there is an any errors and show the model
+    if (Object.keys(errors).length > 0) {
+      if (errors[Object.keys(errors)[0]] !== "") {
+        setIsModel(true);
+      }
+    }
+  }, [checkError]);
+
+  useEffect(() => {
+    //check if there is an any errors and show the model
+    if (Object.keys(errors).length === 0 && isSubmit) {
+      handelSubmit();
+    }
+  }, [errors]);
+
+  const savedProfileDetails = () => {
+    setErrors(ValidateSignUp(values));
+    setCheckError(!checkError);
+    setIsSubmit(true);
+  };
+
+  const handelSubmit = () => {
+    Axios.put(
+      `${API_KEY}/user/updateprofile/${userDetails.id}`,
+      {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        username: values.userName,
+        email: values.email,
+        phone_number: values.phoneNumber,
+        location: location || null,
+      },
+      {
+        headers: { Authorization: "Bearer " + token },
+      }
+    )
+      .then(async () => {
+        dispatch(setUserDetails());
+
+        //if profile pic edited true
+        if (proPic.edited) {
+          let formData = new FormData();
+          const split = proPic.uri.split("/");
+          const filenameWithExt = split[split.length - 1];
+          const mimeType = mime.lookup(filenameWithExt);
+
+          formData.append("file", {
+            uri: proPic.uri,
+            name: filenameWithExt,
+            type: mimeType,
+          });
+          let result = await fetch(`${API_KEY}/user/uploadprofilepic`, {
+            method: "post",
+            body: formData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + token,
+            },
+          });
+
+          let responseJson = await result.json();
+
+          if (responseJson) {
+            navigation.goBack();
+          }
+        } else {
+          navigation.goBack();
+        }
+      })
+      .catch((err) => console.log(err.response.data));
+  };
 
   return (
     <View style={styles.screen}>
+      {isModel && (
+        <ErrorModel
+          title="SignUp Failed"
+          msg={errors}
+          type="Error"
+          setIsModel={setIsModel}
+        />
+      )}
       <View style={styles.profileTopSection}>
         <View>
           <Text style={styles.title}>Update Profile Details</Text>
         </View>
-        <View style={styles.profileImageSec}>
-          <View style={styles.profileImageContainer}>
-            <Image
-              source={{
-                uri:
-                  user.profile_picture && `${API_KEY}/${user.profile_picture}`,
-              }}
-              style={styles.image}
-            />
-            <TouchableOpacity style={styles.upSec}>
-              <FontAwesomeIcon icon={faCamera} size={18} color="green" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <ProfileImageSec
+          userDetails={userDetails}
+          proPic={proPic}
+          setProPic={setProPic}
+        />
       </View>
-      <UpdateProfileForm />
+      <UpdateProfileForm
+        user={userDetails}
+        savedProfileDetails={savedProfileDetails}
+        values={values}
+        setValues={setValues}
+      />
     </View>
   );
 };
@@ -55,28 +158,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: GlobalStyles.SemiBoldFonts,
     color: GlobalStyles.mainColor,
-  },
-  profileImageSec: {
-    alignItems: "center",
-  },
-  profileImageContainer: {
-    position: "relative",
-  },
-  upSec: {
-    position: "absolute",
-    bottom: "20%",
-    right: "0%",
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    padding: 5,
-  },
-  image: {
-    width: 120,
-    height: 120,
-    borderColor: GlobalStyles.mainColor,
-    borderWidth: 2,
-    borderRadius: 100,
-    marginBottom: 15,
   },
   profileBottomSection: {
     flex: 0.7,
