@@ -106,7 +106,15 @@ const ProfileSettingsScreen = ({ navigation }) => {
           navigation.goBack();
         }
       })
-      .catch((err) => console.log(err.response.data));
+      .catch((err) => {
+        if (err.response.data.detail.userName) {
+          setErrors({ ...errors, userName: err.response.data.detail.userName });
+        }
+        if (err.response.data.detail.email) {
+          setErrors({ ...errors, email: err.response.data.detail.email });
+        }
+        setCheckError(!checkError);
+      });
   };
 
   return (
