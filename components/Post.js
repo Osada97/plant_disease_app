@@ -5,6 +5,7 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -86,6 +87,27 @@ const Post = ({ item, setIsRefresh, isRefresh }) => {
     navigation.navigate("post", { id: item.id });
   };
 
+  //delete the post
+  const deletePost = (id) => {
+    Alert.alert(
+      "Delete Question",
+      "Are you sure you want to delete this account?",
+      [
+        { text: "No" },
+        {
+          text: "Delete",
+          onPress: () => {
+            Axios.delete(`${API_KEY}/community/removeposts/${id}`, {
+              headers: { Authorization: "Bearer " + token },
+            })
+              .then(() => setIsRefresh(!isRefresh))
+              .catch((err) => console.log(err));
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <Pressable style={[styles.card]} onPress={() => navigateToPost()}>
       {!item.default_image && <PostImageSection postImages={postImages} />}
@@ -114,7 +136,10 @@ const Post = ({ item, setIsRefresh, isRefresh }) => {
             >
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => deletePost(item.id)}
+            >
               <Text style={[styles.buttonText, { color: "#cf1754" }]}>
                 Delete
               </Text>
