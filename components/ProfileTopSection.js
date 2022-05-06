@@ -1,6 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { View, Text, StyleSheet, Image } from "react-native";
 import GlobalStyles from "../utils/GlobalStyles";
 import { useSelector } from "react-redux";
 import { API_KEY } from "@env";
@@ -18,9 +16,6 @@ const ProfileTopSection = () => {
             }}
             style={styles.image}
           />
-          <TouchableOpacity style={styles.upSec}>
-            <FontAwesomeIcon icon={faCamera} size={18} color="green" />
-          </TouchableOpacity>
         </View>
         <Text style={styles.main}>
           {user.first_name + " " + user.last_name}
@@ -37,26 +32,19 @@ export default ProfileTopSection;
 const styles = StyleSheet.create({
   profileTopSection: {
     flex: 0.5,
-    paddingVertical: 30,
-    paddingHorizontal: 15,
     justifyContent: "center",
     alignItems: "center",
     borderBottomColor: "#eee",
     borderBottomWidth: 1,
+    marginBottom: 5,
+    backgroundColor: "#fff",
+    borderRadius: 40,
   },
   profileImageSec: {
     alignItems: "center",
   },
   profileImageContainer: {
     position: "relative",
-  },
-  upSec: {
-    position: "absolute",
-    bottom: "20%",
-    right: "0%",
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    padding: 5,
   },
   image: {
     width: 120,

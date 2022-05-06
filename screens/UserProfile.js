@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import ProfileTopSection from "../components/ProfileTopSection";
 import ProfileBottomSection from "../components/ProfileBottomSection";
 import { useIsFocused } from "@react-navigation/native";
+import GlobalStyles from "../utils/GlobalStyles";
 
 const UserProfile = ({ navigation }) => {
   const user = useSelector((state) => state.user);
@@ -28,6 +29,7 @@ export default UserProfile;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: GlobalStyles.backgroundColor,
+    padding: 10,
   },
 });

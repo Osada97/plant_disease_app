@@ -106,13 +106,16 @@ export default ProfileBottomSection;
 const styles = StyleSheet.create({
   profileBottomSection: {
     flex: 0.5,
-    padding: 25,
+    padding: 10,
   },
   listRow: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: 25,
+    marginBottom: 20,
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    borderRadius: 10,
   },
   listRowSecOne: {
     flexDirection: "row",
@@ -120,24 +123,16 @@ const styles = StyleSheet.create({
     flex: 0.7,
   },
   icon: {
-    backgroundColor: "#ebfffb",
     padding: 10,
     borderRadius: 3,
     marginRight: 10,
-  },
-  iconRed: {
-    backgroundColor: "#ffeded",
   },
   listText: {
     fontFamily: GlobalStyles.customFonts,
     fontSize: 17,
   },
   directButton: {
-    backgroundColor: "#ebfffb",
     padding: 10,
     borderRadius: 50,
-  },
-  directButtonRed: {
-    backgroundColor: "#ffeded",
   },
 });
