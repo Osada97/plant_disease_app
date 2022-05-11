@@ -22,23 +22,24 @@ const AllPostsScreen = () => {
   const [isRefresh, setIsRefresh] = useState(false);
   const isFocused = useIsFocused();
 
-  const { isLogged } = UserStatus();
   const { userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
-    Axios.get(
-      `${API_KEY}/community/getpost`,
-      isLogged() && {
-        headers: {
-          id: userDetails.id,
-        },
-      }
-    )
-      .then((res) => {
-        setPostData([...res.data]);
-      })
-      .catch((err) => console.log(err.response.data));
-  }, [isRefresh, isFocused]);
+    if (isFocused) {
+      Axios.get(
+        `${API_KEY}/community/getpost`,
+        Object.keys(userDetails).length > 0 && {
+          headers: {
+            id: userDetails.id,
+          },
+        }
+      )
+        .then((res) => {
+          setPostData([...res.data]);
+        })
+        .catch((err) => console.log(err.response.data));
+    }
+  }, [isRefresh, isFocused, userDetails]);
 
   return (
     <View style={styles.screen}>

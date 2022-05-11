@@ -12,7 +12,7 @@ import {
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import GlobalStyles from "../utils/GlobalStyles";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as mime from "react-native-mime-types";
 import * as ImagePicker from "expo-image-picker";
 import AddEditImageCoursoul from "../components/AddEditImageCoursoul";

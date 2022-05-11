@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ToastAndroid,
+  Platform,
 } from "react-native";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -62,12 +63,11 @@ const CommunityPost = ({ item, setIsRefresh, isRefresh }) => {
           .catch((err) => console.log(err.response.data));
       }
     } else {
-      ToastAndroid.showWithGravity(
-        "Please Log into system",
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM
-      );
-      // navigation.navigate("ProfileNavigation", { screen: "login" });
+      console.log("manohara");
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
+      }
+      navigation.navigate("ProfileNavigation", { screen: "login" });
     }
   };
   const addDownVote = () => {
@@ -90,11 +90,10 @@ const CommunityPost = ({ item, setIsRefresh, isRefresh }) => {
           .catch((err) => console.log(err.response.data));
       }
     } else {
-      ToastAndroid.showWithGravity(
-        "Please Log into system",
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM
-      );
+      console.log("osada");
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
+      }
       navigation.navigate("ProfileNavigation", { screen: "login" });
     }
   };
@@ -146,7 +145,7 @@ const CommunityPost = ({ item, setIsRefresh, isRefresh }) => {
                   { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
                 ]}
                 onPress={() =>
-                  navigation.navigate("postSetting", { id: item.id })
+                  navigation.navigate("Post_Setting", { id: item.id })
                 }
               >
                 <Text style={styles.buttonText}>Edit</Text>
