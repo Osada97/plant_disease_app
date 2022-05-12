@@ -13,7 +13,6 @@ import Axios from "axios";
 import { API_KEY } from "@env";
 import { useSelector } from "react-redux";
 import GlobalStyles from "../utils/GlobalStyles";
-import UserStatus from "../utils/hook/UserStatus";
 import CommunityPost from "../components/CommunityPost";
 import { useIsFocused } from "@react-navigation/native";
 

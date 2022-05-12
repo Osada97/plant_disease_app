@@ -119,8 +119,12 @@ const CommunityPost = ({ item, setIsRefresh, isRefresh }) => {
     );
   };
 
+  const navigateToPost = () => {
+    navigation.navigate("post_details", { id: item.id });
+  };
+
   return (
-    <Pressable style={[styles.card]} /*onPress={() => navigateToPost()}*/>
+    <Pressable style={[styles.card]} onPress={() => navigateToPost()}>
       {!item.default_image && <PostImageSection postImages={postImages} />}
       {item.isUser && (
         <Pressable
