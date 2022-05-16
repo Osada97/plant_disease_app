@@ -90,8 +90,8 @@ const PostSettingScreen = ({ route, navigation }) => {
         Keyboard.dismiss();
         if (image.length > 0) {
           imageUpload(res.data);
+          navigation.goBack();
         } else {
-          setIsRefresh(!isRefresh);
           navigation.goBack();
         }
       })
@@ -125,12 +125,11 @@ const PostSettingScreen = ({ route, navigation }) => {
           }
         );
 
-        let responseJson = await result.json();
-
-        if (responseJson) {
-          setIsRefresh(!isRefresh);
-          navigation.goBack();
-        }
+        // let responseJson = await result.json();
+        // if (responseJson) {
+        //   setIsRefresh(!isRefresh);
+        //   navigation.goBack();
+        // }
       }
     }
   };

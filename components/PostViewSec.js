@@ -81,7 +81,7 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
                   { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
                 ]}
                 onPress={() =>
-                  navigation.navigate("postSetting", { id: postDetails.id })
+                  navigation.navigate("Post_Setting", { id: postDetails.id })
                 }
               >
                 <Text style={styles.buttonText}>Edit</Text>

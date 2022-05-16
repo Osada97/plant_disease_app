@@ -90,9 +90,11 @@ const CommunityPostSetting = ({ route, navigation }) => {
         Keyboard.dismiss();
         if (image.length > 0) {
           imageUpload(res.data);
+          // setIsRefresh(!isRefresh);
+          navigation.goBack();
         } else {
           setIsRefresh(!isRefresh);
-          navigation.goBack();
+          // navigation.goBack();
         }
       })
       .catch((err) => console.log(err));
@@ -125,12 +127,12 @@ const CommunityPostSetting = ({ route, navigation }) => {
           }
         );
 
-        let responseJson = await result.json();
+        // let responseJson = await result.json();
 
-        if (responseJson) {
-          setIsRefresh(!isRefresh);
-          navigation.goBack();
-        }
+        // if (responseJson) {
+        //   setIsRefresh(!isRefresh);
+        //   navigation.goBack();
+        // }
       }
     }
   };
