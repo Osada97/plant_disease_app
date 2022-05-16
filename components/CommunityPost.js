@@ -63,11 +63,12 @@ const CommunityPost = ({ item, setIsRefresh, isRefresh }) => {
           .catch((err) => console.log(err.response.data));
       }
     } else {
-      console.log("manohara");
       if (Platform.OS === "android") {
         ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
       }
-      navigation.navigate("ProfileNavigation", { screen: "login" });
+      navigation.navigate("ProfileNavigation", {
+        screen: "profile",
+      });
     }
   };
   const addDownVote = () => {
@@ -90,7 +91,6 @@ const CommunityPost = ({ item, setIsRefresh, isRefresh }) => {
           .catch((err) => console.log(err.response.data));
       }
     } else {
-      console.log("osada");
       if (Platform.OS === "android") {
         ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
       }

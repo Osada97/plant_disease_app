@@ -50,6 +50,7 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
             postDetails={postDetails}
             setIsRefresh={setIsRefresh}
             isRefresh={isRefresh}
+            navigation={navigation}
           />
         ) : (
           <View style={styles.textCont}>

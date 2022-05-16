@@ -6,6 +6,8 @@ import {
   Pressable,
   TouchableOpacity,
   Alert,
+  Platform,
+  ToastAndroid,
 } from "react-native";
 import { useState } from "react";
 import GlobalStyles from "../utils/GlobalStyles";
@@ -28,44 +30,63 @@ const Comment = ({
   setComment,
   setIsEdit,
   setCommentId,
+  navigation,
 }) => {
   const [optionSec, setOptionSec] = useState(false);
 
   const { token } = useSelector((state) => state.user);
 
   const addUpVote = () => {
-    if (!data.isUpVoted) {
-      Axios.post(`${API_KEY}/community/comment/upvote/${data.id}`, "", {
-        headers: { Authorization: "Bearer " + token },
-      })
-        .then(() => setIsRefresh(!isRefresh))
-        .catch((err) => console.log(err.response.data));
+    if (token) {
+      if (!data.isUpVoted) {
+        Axios.post(`${API_KEY}/community/comment/upvote/${data.id}`, "", {
+          headers: { Authorization: "Bearer " + token },
+        })
+          .then(() => setIsRefresh(!isRefresh))
+          .catch((err) => console.log(err.response.data));
+      } else {
+        Axios.delete(`${API_KEY}/community/comment/removeupvote/${data.id}`, {
+          headers: { Authorization: "Bearer " + token },
+        })
+          .then(() => setIsRefresh(!isRefresh))
+          .catch((err) => console.log(err.response.data));
+      }
     } else {
-      Axios.delete(`${API_KEY}/community/comment/removeupvote/${data.id}`, {
-        headers: { Authorization: "Bearer " + token },
-      })
-        .then(() => setIsRefresh(!isRefresh))
-        .catch((err) => console.log(err.response.data));
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
+      }
+      navigation.navigate("ProfileNavigation", {
+        screen: "profile",
+      });
     }
   };
 
   const addDownVote = () => {
-    if (!data.isDownVoted) {
-      Axios.post(`${API_KEY}/community/comment/downvote/${data.id}`, "", {
-        headers: { Authorization: "Bearer " + token },
-      })
-        .then(() => setIsRefresh(!isRefresh))
-        .catch((err) => console.log(err.response.data));
-    } else {
-      Axios.delete(
-        `${API_KEY}/community/comment/removedownvote/${data.id}`,
-
-        {
+    if (token) {
+      if (!data.isDownVoted) {
+        Axios.post(`${API_KEY}/community/comment/downvote/${data.id}`, "", {
           headers: { Authorization: "Bearer " + token },
-        }
-      )
-        .then(() => setIsRefresh(!isRefresh))
-        .catch((err) => console.log(err.response.data));
+        })
+          .then(() => setIsRefresh(!isRefresh))
+          .catch((err) => console.log(err.response.data));
+      } else {
+        Axios.delete(
+          `${API_KEY}/community/comment/removedownvote/${data.id}`,
+
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
+          .then(() => setIsRefresh(!isRefresh))
+          .catch((err) => console.log(err.response.data));
+      }
+    } else {
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
+      }
+      navigation.navigate("ProfileNavigation", {
+        screen: "profile",
+      });
     }
   };
 

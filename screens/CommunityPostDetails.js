@@ -70,6 +70,7 @@ const CommunityPostDetails = ({ route, navigation }) => {
                 setIsEdit={setIsEdit}
                 isEdit={isEdit}
                 setCommentId={setCommentId}
+                navigation={navigation}
               />
             ))}
           </>

@@ -6,7 +6,7 @@ import ProfileBottomSection from "../components/ProfileBottomSection";
 import { useIsFocused } from "@react-navigation/native";
 import GlobalStyles from "../utils/GlobalStyles";
 
-const UserProfile = ({ navigation }) => {
+const UserProfile = ({ navigation, params }) => {
   const user = useSelector((state) => state.user);
   const isFocused = useIsFocused();
 

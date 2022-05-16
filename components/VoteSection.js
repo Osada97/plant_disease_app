@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  ToastAndroid,
+} from "react-native";
 import React from "react";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -7,7 +14,7 @@ import { API_KEY } from "@env";
 import { useSelector } from "react-redux";
 import Axios from "axios";
 
-const VoteSection = ({ postDetails, setIsRefresh, isRefresh }) => {
+const VoteSection = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
   const { token } = useSelector((state) => state.user);
   const addUpVote = () => {
     if (token) {
@@ -32,6 +39,13 @@ const VoteSection = ({ postDetails, setIsRefresh, isRefresh }) => {
           .then(() => setIsRefresh(!isRefresh))
           .catch((err) => console.log(err.response.data));
       }
+    } else {
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
+      }
+      navigation.navigate("ProfileNavigation", {
+        screen: "profile",
+      });
     }
   };
   const addDownVote = () => {
@@ -57,6 +71,13 @@ const VoteSection = ({ postDetails, setIsRefresh, isRefresh }) => {
           .then(() => setIsRefresh(!isRefresh))
           .catch((err) => console.log(err.response.data));
       }
+    } else {
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
+      }
+      navigation.navigate("ProfileNavigation", {
+        screen: "profile",
+      });
     }
   };
   return (
