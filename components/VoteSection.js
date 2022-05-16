@@ -65,7 +65,9 @@ const VoteSection = ({ postDetails, setIsRefresh, isRefresh }) => {
         <FontAwesomeIcon
           icon={faThumbsUp}
           size={22}
-          color={postDetails.isUpVoted ? "#1d917b" : "#797e85"}
+          color={
+            postDetails.isUpVoted && postDetails.isUser ? "#1d917b" : "#797e85"
+          }
         />
         <Text style={styles.lkText}>
           {postDetails.up_vote_count !== 0
@@ -77,7 +79,11 @@ const VoteSection = ({ postDetails, setIsRefresh, isRefresh }) => {
         <FontAwesomeIcon
           icon={faThumbsDown}
           size={22}
-          color={postDetails.isDownVoted ? "#cf1754" : "#797e85"}
+          color={
+            postDetails.isDownVoted && postDetails.isUser
+              ? "#cf1754"
+              : "#797e85"
+          }
         />
         <Text style={styles.lkText}>
           {postDetails.down_vote_count !== 0

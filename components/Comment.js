@@ -145,7 +145,7 @@ const Comment = ({
             <FontAwesomeIcon
               icon={faThumbsUp}
               size={18}
-              color={data.isUpVoted ? "#1d917b" : "#797e85"}
+              color={data.isUpVoted && data.isUser ? "#1d917b" : "#797e85"}
             />
             <Text style={styles.cmText}>
               {data.up_vote_count > 0 ? data.up_vote_count : "Upvote"}
@@ -155,49 +155,51 @@ const Comment = ({
             <FontAwesomeIcon
               icon={faThumbsDown}
               size={18}
-              color={data.isDownVoted ? "#cf1754" : "#797e85"}
+              color={data.isDownVoted && data.isUser ? "#cf1754" : "#797e85"}
             />
             <Text style={styles.cmText}>
               {data.down_vote_count > 0 ? data.down_vote_count : "Downvote"}
             </Text>
           </TouchableOpacity>
         </View>
-        <Pressable
-          style={[styles.infoContainer, optionSec && styles.overlay]}
-          onPress={() => setOptionSec(false)}
-        >
+        {data.isUser && (
           <Pressable
-            style={styles.info}
-            onPress={() => setOptionSec(!optionSec)}
+            style={[styles.infoContainer, optionSec && styles.overlay]}
+            onPress={() => setOptionSec(false)}
           >
-            <FontAwesomeIcon
-              icon={faEllipsisVertical}
-              size={20}
-              color={GlobalStyles.mainColor}
-            />
+            <Pressable
+              style={styles.info}
+              onPress={() => setOptionSec(!optionSec)}
+            >
+              <FontAwesomeIcon
+                icon={faEllipsisVertical}
+                size={20}
+                color={GlobalStyles.mainColor}
+              />
+            </Pressable>
+            {optionSec && (
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
+                  ]}
+                  onPress={() => editComment(data.id, data.comment, data.image)}
+                >
+                  <Text style={styles.buttonText}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => deleteComment(data.id)}
+                >
+                  <Text style={[styles.buttonText, { color: "#cf1754" }]}>
+                    Delete
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </Pressable>
-          {optionSec && (
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
-                ]}
-                onPress={() => editComment(data.id, data.comment, data.image)}
-              >
-                <Text style={styles.buttonText}>Edit</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => deleteComment(data.id)}
-              >
-                <Text style={[styles.buttonText, { color: "#cf1754" }]}>
-                  Delete
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </Pressable>
+        )}
       </View>
     </View>
   );

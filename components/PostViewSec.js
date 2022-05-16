@@ -57,38 +57,43 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
           </View>
         )}
       </View>
-      <Pressable
-        style={[styles.infoContainer, optionSec && styles.overlay]}
-        onPress={() => setOptionSec(false)}
-      >
-        <Pressable style={styles.info} onPress={() => setOptionSec(!optionSec)}>
-          <FontAwesomeIcon
-            icon={faEllipsisVertical}
-            size={20}
-            color={GlobalStyles.mainColor}
-          />
+      {postDetails.isUser && (
+        <Pressable
+          style={[styles.infoContainer, optionSec && styles.overlay]}
+          onPress={() => setOptionSec(false)}
+        >
+          <Pressable
+            style={styles.info}
+            onPress={() => setOptionSec(!optionSec)}
+          >
+            <FontAwesomeIcon
+              icon={faEllipsisVertical}
+              size={20}
+              color={GlobalStyles.mainColor}
+            />
+          </Pressable>
+          {optionSec && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
+                ]}
+                onPress={() =>
+                  navigation.navigate("postSetting", { id: postDetails.id })
+                }
+              >
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <Text style={[styles.buttonText, { color: "#cf1754" }]}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </Pressable>
-        {optionSec && (
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[
-                styles.button,
-                { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
-              ]}
-              onPress={() =>
-                navigation.navigate("postSetting", { id: postDetails.id })
-              }
-            >
-              <Text style={styles.buttonText}>Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={[styles.buttonText, { color: "#cf1754" }]}>
-                Delete
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </Pressable>
+      )}
     </View>
   );
 };
