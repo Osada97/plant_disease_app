@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import AllPostsScreen from "../screens/AllPostsScreen";
 import CommunityPostDetails from "../screens/CommunityPostDetails";
 import CommunityPostSetting from "../screens/CommunityPostSetting";
@@ -7,7 +7,7 @@ import UserStatus from "../utils/hook/UserStatus";
 
 const Stack = createNativeStackNavigator();
 
-const CommunityScreenNavigation = ({ navigation }) => {
+const CommunityScreenNavigation = ({ navigation, route }) => {
   const { loadUserDetails } = UserStatus();
 
   useEffect(() => {
@@ -15,6 +15,12 @@ const CommunityScreenNavigation = ({ navigation }) => {
       loadUserDetails();
     });
   }, [navigation]);
+
+  useLayoutEffect(() => {
+    if (route.name !== "post_details") {
+      navigation.setOptions({ tabBarStyle: { display: "flex" } });
+    }
+  }, [route]);
 
   return (
     <Stack.Navigator
