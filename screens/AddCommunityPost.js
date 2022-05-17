@@ -24,7 +24,7 @@ import AddPostHook from "../utils/hook/AddPostHook";
 
 const windowWidth = Dimensions.get("window").width;
 
-const AddPostScreen = ({ navigation }) => {
+const AddCommunityPost = ({ navigation }) => {
   const [image, setImage] = useState([]);
   const [isModel, setIsModel] = useState(false);
   const [isRefresh, setIsRefresh] = useState(false);
@@ -93,6 +93,21 @@ const AddPostScreen = ({ navigation }) => {
           setIsRefresh(!isRefresh);
           navigation.goBack();
         }
+        if (Platform.OS === "android") {
+          ToastAndroid.show(
+            "Your question will appear automatically after review admin",
+            ToastAndroid.LONG
+          );
+        } else {
+          Alert.alert(
+            "Successfully added post",
+            "Your question weill appear automatically after review admin",
+            [{ text: "Ok" }],
+            {
+              cancelable: true,
+            }
+          );
+        }
       })
       .catch((err) => console.log(err));
   }
@@ -130,7 +145,6 @@ const AddPostScreen = ({ navigation }) => {
     }
     navigation.goBack();
   };
-
   return (
     <View style={styles.screen}>
       {isModel && (
@@ -186,7 +200,7 @@ const AddPostScreen = ({ navigation }) => {
   );
 };
 
-export default AddPostScreen;
+export default AddCommunityPost;
 
 const styles = StyleSheet.create({
   screen: {

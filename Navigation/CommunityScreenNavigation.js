@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useLayoutEffect } from "react";
+import AddCommunityPost from "../screens/AddCommunityPost";
 import AllPostsScreen from "../screens/AllPostsScreen";
 import CommunityPostDetails from "../screens/CommunityPostDetails";
 import CommunityPostSetting from "../screens/CommunityPostSetting";
@@ -30,6 +31,7 @@ const CommunityScreenNavigation = ({ navigation, route }) => {
       <Stack.Screen name="All Posts" component={AllPostsScreen} />
       <Stack.Screen name="Post_Setting" component={CommunityPostSetting} />
       <Stack.Screen name="post_details" component={CommunityPostDetails} />
+      <Stack.Screen name="add_post" component={AddCommunityPost} />
     </Stack.Navigator>
   );
 };

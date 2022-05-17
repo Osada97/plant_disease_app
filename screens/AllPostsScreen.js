@@ -6,6 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  Platform,
+  ToastAndroid,
 } from "react-native";
 import { faSearch, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -16,7 +18,7 @@ import GlobalStyles from "../utils/GlobalStyles";
 import CommunityPost from "../components/CommunityPost";
 import { useIsFocused } from "@react-navigation/native";
 
-const AllPostsScreen = () => {
+const AllPostsScreen = ({ navigation }) => {
   const [postData, setPostData] = useState([]);
   const [isRefresh, setIsRefresh] = useState(false);
   const isFocused = useIsFocused();
@@ -39,6 +41,20 @@ const AllPostsScreen = () => {
         .catch((err) => console.log(err.response.data));
     }
   }, [isRefresh, isFocused, userDetails]);
+
+  const navigateToAskQuestion = () => {
+    //check user is already logged in
+    if (Object.keys(userDetails).length > 0) {
+      navigation.navigate("add_post");
+    } else {
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
+      }
+      navigation.navigate("ProfileNavigation", {
+        screen: "profile",
+      });
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -70,7 +86,7 @@ const AllPostsScreen = () => {
       {/* add post section */}
       <TouchableOpacity
         style={styles.addSection}
-        // onPress={() => navigation.navigate("postAdd")}
+        onPress={() => navigateToAskQuestion()}
       >
         <FontAwesomeIcon icon={faPen} size={18} color="#fff" />
         <Text style={styles.addSectionText}>Ask Question</Text>

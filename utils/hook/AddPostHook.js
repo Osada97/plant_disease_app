@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const AddPostHook = (handelSubmit, image, setImage) => {
+const AddPostHook = (handelSubmit, image, setImage, setIsModel) => {
   const [values, setValues] = useState({
     title: "",
     description: "",
