@@ -11,6 +11,7 @@ import GlobalStyles from "../utils/GlobalStyles";
 import { clearSecureValue } from "../utils/SecureStore";
 import { useDispatch } from "react-redux";
 import { clearUserDetails } from "../actions/clearUserDetails";
+import { SetUserLoggedOutStatus } from "../actions/UserLoggedStatus";
 
 const ProfileBottomSection = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const ProfileBottomSection = ({ navigation }) => {
         text: "Log out",
         onPress: async () => {
           dispatch(clearUserDetails());
+          dispatch(SetUserLoggedOutStatus());
           await clearSecureValue("access_token");
         },
         style: "destructive",

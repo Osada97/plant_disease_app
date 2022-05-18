@@ -1,6 +1,10 @@
 import { getSecureValue, clearSecureValue } from "../utils/SecureStore";
 import axios from "axios";
 import { API_KEY } from "@env";
+import {
+  SetUserLoggedInStatus,
+  SetUserLoggedOutStatus,
+} from "./UserLoggedStatus";
 
 export const setUserDetails = () => async (dispatch) => {
   const token = await getSecureValue("access_token");
@@ -13,6 +17,7 @@ export const setUserDetails = () => async (dispatch) => {
         },
       })
       .then((res) => {
+        //set user
         dispatch({
           type: "SETUSER",
           payload: {
@@ -21,11 +26,14 @@ export const setUserDetails = () => async (dispatch) => {
             userDetails: res.data,
           },
         });
+        //set user loggedIn status
+        dispatch(SetUserLoggedInStatus());
       })
       .catch(async () => {
         dispatch({
           type: "REMOVEUSER",
         });
+        dispatch(SetUserLoggedOutStatus());
         await clearSecureValue("access_token");
       });
   } else {

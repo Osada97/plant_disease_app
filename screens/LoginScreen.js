@@ -13,14 +13,14 @@ const LoginScreen = ({ navigation }) => {
   const width = Dimensions.get("window").width;
   const height = (width * vHeight) / vWidth;
 
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
 
   //if user is already login then hide login screen and view profile screen
-  useEffect(() => {
-    if (Object.keys(user.userDetails).length > 0) {
-      navigation.navigate("profile");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (Object.keys(user.userDetails).length > 0) {
+  //     navigation.navigate("profile");
+  //   }
+  // }, [user]);
 
   return (
     <View style={styles.screen}>

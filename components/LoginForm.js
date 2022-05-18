@@ -69,7 +69,7 @@ const LoginForm = ({ navigation }) => {
         .then((res) => {
           setSecureValue("access_token", res.data.access_token);
           dispatch(setUserDetails());
-          navigation.navigate("profile");
+          // navigation.navigate("profile");
         })
         .catch((err) => {
           //set errors

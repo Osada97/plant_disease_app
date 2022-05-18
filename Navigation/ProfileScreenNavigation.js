@@ -11,15 +11,17 @@ import PostScreen from "../screens/PostScreen";
 import PostSettingScreen from "../screens/PostSettingScreen";
 import AddPostScreen from "../screens/AddPostScreen";
 import AdminProfileScreen from "../screens/Admin/AdminProfileScreen";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
 const ProfileScreenNavigation = ({ route, navigation }) => {
   const { loadUserDetails } = UserStatus();
-
+  const userStatus = useSelector((state) => state.userIsLoggedIn);
+  console.log(userStatus);
   useEffect(() => {
-    navigation.addListener("focus", () => {
-      loadUserDetails();
+    navigation.addListener("focus", async () => {
+      await loadUserDetails(); //load details
     });
   }, [navigation]);
 
@@ -31,17 +33,27 @@ const ProfileScreenNavigation = ({ route, navigation }) => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="profile" component={UserProfile} />
-      <Stack.Screen name="login" component={LoginScreen} />
-      <Stack.Screen name="signUp" component={SignUpScreen} />
-      <Stack.Screen name="userPosts" component={UserPostsScreen} />
-      <Stack.Screen name="post" component={PostScreen} />
-      <Stack.Screen name="postSetting" component={PostSettingScreen} />
-      <Stack.Screen name="postAdd" component={AddPostScreen} />
-      <Stack.Screen name="userSettings" component={ProfileSettingsScreen} />
-      <Stack.Screen name="changePassword" component={ChangePasswordScreen} />
+      {!userStatus ? (
+        <>
+          <Stack.Screen name="login" component={LoginScreen} />
+          <Stack.Screen name="signUp" component={SignUpScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="profile" component={UserProfile} />
+          <Stack.Screen name="userPosts" component={UserPostsScreen} />
+          <Stack.Screen name="post" component={PostScreen} />
+          <Stack.Screen name="postSetting" component={PostSettingScreen} />
+          <Stack.Screen name="postAdd" component={AddPostScreen} />
+          <Stack.Screen name="userSettings" component={ProfileSettingsScreen} />
+          <Stack.Screen
+            name="changePassword"
+            component={ChangePasswordScreen}
+          />
+        </>
+      )}
       {/* admin */}
-      <Stack.Screen name="adminProfile" component={AdminProfileScreen} />
+      {/* <Stack.Screen name="adminProfile" component={AdminProfileScreen} /> */}
     </Stack.Navigator>
   );
 };
