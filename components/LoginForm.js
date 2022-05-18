@@ -15,6 +15,7 @@ import { API_KEY } from "@env";
 import { setSecureValue } from "../utils/SecureStore";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../actions/setUserDetails";
+import { setAdminDetails } from "../actions/setAdminDetails";
 
 const LoginForm = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -32,26 +33,61 @@ const LoginForm = ({ navigation }) => {
   } = LoginCustomHook(handelSubmit);
 
   async function handelSubmit() {
-    await axios
-      .post(`${API_KEY}/user/login`, {
-        username: loginForm.userName,
-        password: loginForm.password,
-      })
-      .then((res) => {
-        setSecureValue("access_token", res.data.access_token);
-        dispatch(setUserDetails());
-        navigation.navigate("profile");
-      })
-      .catch((err) => {
-        //set errors
-        if (err.response.data.detail.userName) {
-          setErrors({ ...errors, userName: err.response.data.detail.userName });
-        }
-        if (err.response.data.detail.password) {
-          setErrors({ ...errors, password: err.response.data.detail.password });
-        }
-        setCheckError(!checkError);
-      });
+    if (loginForm.userName === "admin") {
+      await axios
+        .post(`${API_KEY}/admin/login`, {
+          username: loginForm.userName,
+          password: loginForm.password,
+        })
+        .then((res) => {
+          setSecureValue("access_token", res.data.access_token);
+          dispatch(setAdminDetails());
+          navigation.navigate("adminProfile");
+        })
+        .catch((err) => {
+          //set errors
+          if (err.response.data.detail.userName) {
+            setErrors({
+              ...errors,
+              userName: err.response.data.detail.userName,
+            });
+          }
+          if (err.response.data.detail.password) {
+            setErrors({
+              ...errors,
+              password: err.response.data.detail.password,
+            });
+          }
+          setCheckError(!checkError);
+        });
+    } else {
+      await axios
+        .post(`${API_KEY}/user/login`, {
+          username: loginForm.userName,
+          password: loginForm.password,
+        })
+        .then((res) => {
+          setSecureValue("access_token", res.data.access_token);
+          dispatch(setUserDetails());
+          navigation.navigate("profile");
+        })
+        .catch((err) => {
+          //set errors
+          if (err.response.data.detail.userName) {
+            setErrors({
+              ...errors,
+              userName: err.response.data.detail.userName,
+            });
+          }
+          if (err.response.data.detail.password) {
+            setErrors({
+              ...errors,
+              password: err.response.data.detail.password,
+            });
+          }
+          setCheckError(!checkError);
+        });
+    }
   }
 
   return (

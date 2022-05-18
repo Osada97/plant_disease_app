@@ -10,6 +10,7 @@ import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import PostScreen from "../screens/PostScreen";
 import PostSettingScreen from "../screens/PostSettingScreen";
 import AddPostScreen from "../screens/AddPostScreen";
+import AdminProfileScreen from "../screens/Admin/AdminProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,8 @@ const ProfileScreenNavigation = ({ route, navigation }) => {
       <Stack.Screen name="postAdd" component={AddPostScreen} />
       <Stack.Screen name="userSettings" component={ProfileSettingsScreen} />
       <Stack.Screen name="changePassword" component={ChangePasswordScreen} />
+      {/* admin */}
+      <Stack.Screen name="adminProfile" component={AdminProfileScreen} />
     </Stack.Navigator>
   );
 };

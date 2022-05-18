@@ -1,20 +1,18 @@
 const initialState = {
   token: "",
   type: "",
-  userDetails: {},
+  adminDetails: {},
 };
 
-const userDetailsReducer = (state = initialState, action) => {
+const adminDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SETUSER":
+    case "SETADMIN":
       return { ...state, ...action.payload };
-
-    case "REMOVEUSER":
+    case "REMOVEADMIN":
       return initialState;
-
     default:
       return { ...state };
   }
 };
 
-export default userDetailsReducer;
+export default adminDetailsReducer;
