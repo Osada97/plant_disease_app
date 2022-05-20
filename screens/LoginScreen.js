@@ -1,9 +1,7 @@
 import { View, StyleSheet, Image, Dimensions, Text } from "react-native";
-import { useEffect } from "react";
 import Svg, { Path } from "react-native-svg";
 import GlobalStyles from "../utils/GlobalStyles";
 import LoginForm from "../components/LoginForm";
-import { useSelector } from "react-redux";
 
 const deviceWidth = Dimensions.get("window").width;
 
@@ -12,15 +10,6 @@ const LoginScreen = ({ navigation }) => {
   const vHeight = 358;
   const width = Dimensions.get("window").width;
   const height = (width * vHeight) / vWidth;
-
-  // const user = useSelector((state) => state.user);
-
-  //if user is already login then hide login screen and view profile screen
-  // useEffect(() => {
-  //   if (Object.keys(user.userDetails).length > 0) {
-  //     navigation.navigate("profile");
-  //   }
-  // }, [user]);
 
   return (
     <View style={styles.screen}>

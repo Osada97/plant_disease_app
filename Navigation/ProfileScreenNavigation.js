@@ -18,7 +18,7 @@ const Stack = createNativeStackNavigator();
 const ProfileScreenNavigation = ({ route, navigation }) => {
   const { loadUserDetails } = UserStatus();
   const userStatus = useSelector((state) => state.userIsLoggedIn);
-  console.log(userStatus);
+
   useEffect(() => {
     navigation.addListener("focus", async () => {
       await loadUserDetails(); //load details

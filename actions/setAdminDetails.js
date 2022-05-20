@@ -1,6 +1,10 @@
 import { getSecureValue, clearSecureValue } from "../utils/SecureStore";
 import axios from "axios";
 import { API_KEY } from "@env";
+import {
+  SetAdminLoggedInStatus,
+  SetAdminLoggedOutStatus,
+} from "./AdminLoggedStatus";
 
 export const setAdminDetails = () => async (dispatch) => {
   const token = await getSecureValue("access_token");
@@ -21,12 +25,14 @@ export const setAdminDetails = () => async (dispatch) => {
             adminDetails: res.data,
           },
         });
+        dispatch(SetAdminLoggedInStatus());
       })
       .catch(async () => {
         dispatch({
           type: "REMOVEADMIN",
         });
         await clearSecureValue("access_token");
+        dispatch(SetAdminLoggedOutStatus());
       });
   } else {
     dispatch({
