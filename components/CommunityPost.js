@@ -26,6 +26,7 @@ const CommunityPost = ({ item, setIsRefresh, isRefresh }) => {
 
   const navigation = useNavigation();
   const { token } = useSelector((state) => state.user);
+  const adminStatus = useSelector((state) => state.adminIsLoggedIn);
 
   //take images
   useEffect(() => {
@@ -185,17 +186,20 @@ const CommunityPost = ({ item, setIsRefresh, isRefresh }) => {
           <Text style={styles.mainText}>{item.post_title}</Text>
           <Text style={styles.disText}>{item.description}</Text>
         </View>
-        {item.is_approve ? (
-          <VoteContainer
-            item={item}
-            addDownVote={addDownVote}
-            addUpVote={addUpVote}
-          />
-        ) : (
-          <View style={styles.textCont}>
-            <Text style={styles.textContText}>This Post Not Approved Yet</Text>
-          </View>
-        )}
+        {!adminStatus &&
+          (item.is_approve ? (
+            <VoteContainer
+              item={item}
+              addDownVote={addDownVote}
+              addUpVote={addUpVote}
+            />
+          ) : (
+            <View style={styles.textCont}>
+              <Text style={styles.textContText}>
+                This Post Not Approved Yet
+              </Text>
+            </View>
+          ))}
       </View>
     </Pressable>
   );

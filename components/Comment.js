@@ -35,6 +35,7 @@ const Comment = ({
   const [optionSec, setOptionSec] = useState(false);
 
   const { token } = useSelector((state) => state.user);
+  const adminStatus = useSelector((state) => state.adminIsLoggedIn);
 
   const addUpVote = () => {
     if (token) {
@@ -161,28 +162,30 @@ const Comment = ({
             </View>
           </View>
         </View>
-        <View style={styles.commentVoteCol}>
-          <TouchableOpacity style={styles.voteSec} onPress={addUpVote}>
-            <FontAwesomeIcon
-              icon={faThumbsUp}
-              size={18}
-              color={data.isUpVoted && data.isUser ? "#1d917b" : "#797e85"}
-            />
-            <Text style={styles.cmText}>
-              {data.up_vote_count > 0 ? data.up_vote_count : "Upvote"}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.voteSec} onPress={addDownVote}>
-            <FontAwesomeIcon
-              icon={faThumbsDown}
-              size={18}
-              color={data.isDownVoted && data.isUser ? "#cf1754" : "#797e85"}
-            />
-            <Text style={styles.cmText}>
-              {data.down_vote_count > 0 ? data.down_vote_count : "Downvote"}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {!adminStatus && (
+          <View style={styles.commentVoteCol}>
+            <TouchableOpacity style={styles.voteSec} onPress={addUpVote}>
+              <FontAwesomeIcon
+                icon={faThumbsUp}
+                size={18}
+                color={data.isUpVoted && data.isUser ? "#1d917b" : "#797e85"}
+              />
+              <Text style={styles.cmText}>
+                {data.up_vote_count > 0 ? data.up_vote_count : "Upvote"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.voteSec} onPress={addDownVote}>
+              <FontAwesomeIcon
+                icon={faThumbsDown}
+                size={18}
+                color={data.isDownVoted && data.isUser ? "#cf1754" : "#797e85"}
+              />
+              <Text style={styles.cmText}>
+                {data.down_vote_count > 0 ? data.down_vote_count : "Downvote"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
         {data.isUser && (
           <Pressable
             style={[styles.infoContainer, optionSec && styles.overlay]}

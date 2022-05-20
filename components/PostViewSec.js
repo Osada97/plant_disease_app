@@ -13,10 +13,13 @@ import GlobalStyles from "../utils/GlobalStyles";
 import { API_KEY } from "@env";
 import PostImageSection from "./PostImageSection";
 import VoteSection from "./VoteSection";
+import { useSelector } from "react-redux";
 
 const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
   const { owner, images } = postDetails;
   const [optionSec, setOptionSec] = useState(false);
+
+  const adminStatus = useSelector((state) => state.adminIsLoggedIn);
 
   return (
     <View style={styles.topContainerCard}>
@@ -45,18 +48,21 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
             {postDetails.description || ""}
           </Text>
         </View>
-        {postDetails.is_approve ? (
-          <VoteSection
-            postDetails={postDetails}
-            setIsRefresh={setIsRefresh}
-            isRefresh={isRefresh}
-            navigation={navigation}
-          />
-        ) : (
-          <View style={styles.textCont}>
-            <Text style={styles.textContText}>This Post Not Approved Yet</Text>
-          </View>
-        )}
+        {!adminStatus &&
+          (postDetails.is_approve ? (
+            <VoteSection
+              postDetails={postDetails}
+              setIsRefresh={setIsRefresh}
+              isRefresh={isRefresh}
+              navigation={navigation}
+            />
+          ) : (
+            <View style={styles.textCont}>
+              <Text style={styles.textContText}>
+                This Post Not Approved Yet
+              </Text>
+            </View>
+          ))}
       </View>
       {postDetails.isUser && (
         <Pressable
@@ -104,6 +110,7 @@ export default PostViewSec;
 const styles = StyleSheet.create({
   topContainerCard: {
     padding: 10,
+    paddingBottom: 15,
     marginBottom: 8,
     backgroundColor: "#fff",
     borderBottomLeftRadius: 40,
