@@ -16,13 +16,14 @@ import { useSelector } from "react-redux";
 const Stack = createNativeStackNavigator();
 
 const ProfileScreenNavigation = ({ route, navigation }) => {
-  const { loadUserDetails } = UserStatus();
+  const { loadUserDetails, loadAdminDetails } = UserStatus();
   const userStatus = useSelector((state) => state.userIsLoggedIn);
   const adminStatus = useSelector((state) => state.adminIsLoggedIn);
 
   useEffect(() => {
     navigation.addListener("focus", async () => {
       await loadUserDetails(); //load details
+      await loadAdminDetails(); // load admin details
     });
   }, [navigation]);
 
