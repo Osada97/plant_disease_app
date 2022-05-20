@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, Text } from "react-native";
 import Comment from "../components/Comment";
 import PostViewSec from "../components/PostViewSec";
 import { useFocusEffect } from "@react-navigation/native";
@@ -76,18 +76,22 @@ const CommunityPostDetails = ({ route, navigation }) => {
           </>
         )}
       </ScrollView>
-      <BottomAddCommentSection
-        postDetails={postDetails}
-        setIsRefresh={setIsRefresh}
-        isRefresh={isRefresh}
-        setImages={setImages}
-        images={images}
-        setComment={setComment}
-        comment={comment}
-        setIsEdit={setIsEdit}
-        isEdit={isEdit}
-        commentId={commentId}
-      />
+      {token ? (
+        <BottomAddCommentSection
+          postDetails={postDetails}
+          setIsRefresh={setIsRefresh}
+          isRefresh={isRefresh}
+          setImages={setImages}
+          images={images}
+          setComment={setComment}
+          comment={comment}
+          setIsEdit={setIsEdit}
+          isEdit={isEdit}
+          commentId={commentId}
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
