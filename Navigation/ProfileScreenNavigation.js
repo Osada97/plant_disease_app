@@ -18,6 +18,7 @@ const Stack = createNativeStackNavigator();
 const ProfileScreenNavigation = ({ route, navigation }) => {
   const { loadUserDetails } = UserStatus();
   const userStatus = useSelector((state) => state.userIsLoggedIn);
+  const adminStatus = useSelector((state) => state.adminIsLoggedIn);
 
   useEffect(() => {
     navigation.addListener("focus", async () => {
@@ -33,7 +34,12 @@ const ProfileScreenNavigation = ({ route, navigation }) => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {!userStatus ? (
+      {!userStatus && adminStatus ? (
+        <>
+          {/* admin */}
+          <Stack.Screen name="adminProfile" component={AdminProfileScreen} />
+        </>
+      ) : !userStatus ? (
         <>
           <Stack.Screen name="login" component={LoginScreen} />
           <Stack.Screen name="signUp" component={SignUpScreen} />
@@ -52,8 +58,6 @@ const ProfileScreenNavigation = ({ route, navigation }) => {
           />
         </>
       )}
-      {/* admin */}
-      {/* <Stack.Screen name="adminProfile" component={AdminProfileScreen} /> */}
     </Stack.Navigator>
   );
 };
