@@ -1,15 +1,37 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import GlobalStyles from "../../utils/GlobalStyles";
 import {
   faPaperclip,
-  faGear,
   faChevronRight,
   faKey,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { clearAdminDetails } from "../../actions/clearAdminDetails";
+import { SetAdminLoggedOutStatus } from "../../actions/AdminLoggedStatus";
+import { useDispatch } from "react-redux";
+import { clearSecureValue } from "../../utils/SecureStore";
 
 const AdminProfileBottomSection = () => {
+  const dispatch = useDispatch();
+  const logOut = () => {
+    Alert.alert("Log Out", "Do you really want to Log out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Log out",
+        onPress: async () => {
+          dispatch(clearAdminDetails());
+          dispatch(SetAdminLoggedOutStatus());
+          await clearSecureValue("access_token");
+        },
+        style: "destructive",
+      },
+    ]);
+  };
+
   return (
     <View style={styles.profileBottomSection}>
       <View style={styles.list}>
@@ -30,7 +52,7 @@ const AdminProfileBottomSection = () => {
         <View style={styles.listRow}>
           <View style={styles.listRowSecOne}>
             <View style={styles.icon}>
-              <FontAwesomeIcon icon={faGear} size={18} color="green" />
+              <FontAwesomeIcon icon={faPaperclip} size={18} color="green" />
             </View>
             <Text style={styles.listText}>Approved Posts</Text>
           </View>
@@ -44,7 +66,7 @@ const AdminProfileBottomSection = () => {
         <View style={styles.listRow}>
           <View style={styles.listRowSecOne}>
             <View style={styles.icon}>
-              <FontAwesomeIcon icon={faGear} size={18} color="green" />
+              <FontAwesomeIcon icon={faPaperclip} size={18} color="green" />
             </View>
             <Text style={styles.listText}>Disapproved Posts</Text>
           </View>
@@ -83,7 +105,7 @@ const AdminProfileBottomSection = () => {
           </View>
           <TouchableOpacity
             style={[styles.directButton, styles.directButtonRed]}
-            // onPress={logOut}
+            onPress={logOut}
           >
             <FontAwesomeIcon icon={faChevronRight} size={18} color="red" />
           </TouchableOpacity>
