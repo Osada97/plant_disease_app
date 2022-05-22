@@ -4,7 +4,7 @@ import AdminProfileBottomSection from "../../components/Admin/AdminProfileBottom
 import AdminProfileTopSection from "../../components/Admin/AdminProfileTopSection";
 import { Roboto_100Thin_Italic } from "@expo-google-fonts/roboto";
 
-const AdminProfileScreen = () => {
+const AdminProfileScreen = ({ navigation }) => {
   return (
     <ScrollView
       style={styles.screen}
@@ -13,7 +13,7 @@ const AdminProfileScreen = () => {
       }}
     >
       <AdminProfileTopSection />
-      <AdminProfileBottomSection />
+      <AdminProfileBottomSection navigation={navigation} />
     </ScrollView>
   );
 };

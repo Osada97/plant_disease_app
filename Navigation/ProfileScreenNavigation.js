@@ -12,6 +12,10 @@ import PostSettingScreen from "../screens/PostSettingScreen";
 import AddPostScreen from "../screens/AddPostScreen";
 import AdminProfileScreen from "../screens/Admin/AdminProfileScreen";
 import { useSelector } from "react-redux";
+import AdminAllPosts from "../screens/Admin/AdminAllPosts";
+import AdminApprovedPosts from "../screens/Admin/AdminApprovedPosts";
+import AdminDisapprovedPosts from "../screens/Admin/AdminDisapprovedPosts";
+import AdminChangPassword from "../screens/Admin/AdminChangPassword";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +43,16 @@ const ProfileScreenNavigation = ({ route, navigation }) => {
         <>
           {/* admin */}
           <Stack.Screen name="adminProfile" component={AdminProfileScreen} />
+          <Stack.Screen name="adminAllPosts" component={AdminAllPosts} />
+          <Stack.Screen name="approvedPosts" component={AdminApprovedPosts} />
+          <Stack.Screen
+            name="disapprovedPosts"
+            component={AdminDisapprovedPosts}
+          />
+          <Stack.Screen
+            name="adminChangePassword"
+            component={AdminChangPassword}
+          />
         </>
       ) : !userStatus ? (
         <>

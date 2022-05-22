@@ -12,7 +12,7 @@ import { SetAdminLoggedOutStatus } from "../../actions/AdminLoggedStatus";
 import { useDispatch } from "react-redux";
 import { clearSecureValue } from "../../utils/SecureStore";
 
-const AdminProfileBottomSection = () => {
+const AdminProfileBottomSection = ({ navigation }) => {
   const dispatch = useDispatch();
   const logOut = () => {
     Alert.alert("Log Out", "Do you really want to Log out?", [
@@ -44,7 +44,7 @@ const AdminProfileBottomSection = () => {
           </View>
           <TouchableOpacity
             style={styles.directButton}
-            // onPress={() => navigation.navigate("userPosts")}
+            onPress={() => navigation.navigate("adminAllPosts")}
           >
             <FontAwesomeIcon icon={faChevronRight} size={18} color="green" />
           </TouchableOpacity>
@@ -58,7 +58,7 @@ const AdminProfileBottomSection = () => {
           </View>
           <TouchableOpacity
             style={styles.directButton}
-            // onPress={() => navigation.navigate("userSettings")}
+            onPress={() => navigation.navigate("approvedPosts")}
           >
             <FontAwesomeIcon icon={faChevronRight} size={18} color="green" />
           </TouchableOpacity>
@@ -72,7 +72,7 @@ const AdminProfileBottomSection = () => {
           </View>
           <TouchableOpacity
             style={styles.directButton}
-            // onPress={() => navigation.navigate("userSettings")}
+            onPress={() => navigation.navigate("disapprovedPosts")}
           >
             <FontAwesomeIcon icon={faChevronRight} size={18} color="green" />
           </TouchableOpacity>
@@ -86,7 +86,7 @@ const AdminProfileBottomSection = () => {
           </View>
           <TouchableOpacity
             style={styles.directButton}
-            // onPress={() => navigation.navigate("changePassword")}
+            onPress={() => navigation.navigate("adminChangePassword")}
           >
             <FontAwesomeIcon icon={faChevronRight} size={18} color="green" />
           </TouchableOpacity>
