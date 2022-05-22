@@ -8,8 +8,9 @@ import {
 
 export const setAdminDetails = () => async (dispatch) => {
   const token = await getSecureValue("access_token");
+  const user_role = await getSecureValue("user_role");
 
-  if (token) {
+  if (token && user_role === "admin") {
     await axios
       .get(`${API_KEY}/admin/getdetails`, {
         headers: {

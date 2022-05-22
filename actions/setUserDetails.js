@@ -8,8 +8,9 @@ import {
 
 export const setUserDetails = () => async (dispatch) => {
   const token = await getSecureValue("access_token");
+  const user_role = await getSecureValue("user_role");
 
-  if (token) {
+  if (token && user_role === "user") {
     await axios
       .get(`${API_KEY}/user/getdetails`, {
         headers: {

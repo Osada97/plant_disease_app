@@ -9,11 +9,11 @@ import UserStatus from "../utils/hook/UserStatus";
 const Stack = createNativeStackNavigator();
 
 const CommunityScreenNavigation = ({ navigation, route }) => {
-  const { loadUserDetails } = UserStatus();
+  const { loadUserDetails, loadAdminDetails } = UserStatus();
 
   useEffect(() => {
-    navigation.addListener("focus", () => {
-      loadUserDetails();
+    navigation.addListener("focus", async () => {
+      await loadUserDetails();
     });
   }, [navigation]);
 

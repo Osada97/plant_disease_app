@@ -26,6 +26,7 @@ const AdminProfileBottomSection = ({ navigation }) => {
           dispatch(clearAdminDetails());
           dispatch(SetAdminLoggedOutStatus());
           await clearSecureValue("access_token");
+          await clearSecureValue("user_role");
         },
         style: "destructive",
       },

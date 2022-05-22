@@ -41,6 +41,7 @@ const LoginForm = ({ navigation }) => {
         })
         .then((res) => {
           setSecureValue("access_token", res.data.access_token);
+          setSecureValue("user_role", "admin");
           dispatch(setAdminDetails());
         })
         .catch((err) => {
@@ -67,6 +68,7 @@ const LoginForm = ({ navigation }) => {
         })
         .then((res) => {
           setSecureValue("access_token", res.data.access_token);
+          setSecureValue("user_role", "user");
           dispatch(setUserDetails());
         })
         .catch((err) => {
