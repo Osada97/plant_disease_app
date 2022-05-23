@@ -19,7 +19,28 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
   const { owner, images } = postDetails;
   const [optionSec, setOptionSec] = useState(false);
 
+  const { token } = useSelector((state) => state.user);
   const adminStatus = useSelector((state) => state.adminIsLoggedIn);
+
+  const removePost = (id) => {
+    Alert.alert(
+      "Delete Question",
+      "Are you sure you want to delete this account?",
+      [
+        { text: "No" },
+        {
+          text: "Delete",
+          onPress: () => {
+            Axios.delete(`${API_KEY}/community/removeposts/${id}`, {
+              headers: { Authorization: "Bearer " + token },
+            })
+              .then(() => setIsRefresh(!isRefresh))
+              .catch((err) => console.log(err));
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <View style={styles.topContainerCard}>
@@ -92,7 +113,10 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
               >
                 <Text style={styles.buttonText}>Edit</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => removePost(postDetails.id)}
+              >
                 <Text style={[styles.buttonText, { color: "#cf1754" }]}>
                   Delete
                 </Text>
