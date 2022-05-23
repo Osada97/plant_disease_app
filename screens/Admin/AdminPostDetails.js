@@ -13,10 +13,6 @@ import AdminPostViewSec from "../../components/Admin/AdminPostViewSec";
 const AdminPostDetails = ({ route, navigation }) => {
   const [postDetails, setPostDetails] = useState(null);
   const [isRefresh, setIsRefresh] = useState(false);
-  const [images, setImages] = useState([]);
-  const [comment, setComment] = useState({ comment: "" });
-  const [isEdit, setIsEdit] = useState(false);
-  const [commentId, setCommentId] = useState(null);
 
   const { token } = useSelector((state) => state.admin);
   const { id } = route.params;
@@ -54,14 +50,6 @@ const AdminPostDetails = ({ route, navigation }) => {
                 data={data}
                 setIsRefresh={setIsRefresh}
                 isRefresh={isRefresh}
-                setImages={setImages}
-                images={images}
-                setComment={setComment}
-                comment={comment}
-                setIsEdit={setIsEdit}
-                isEdit={isEdit}
-                setCommentId={setCommentId}
-                navigation={navigation}
               />
             ))}
           </>

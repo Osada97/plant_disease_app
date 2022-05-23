@@ -6,128 +6,41 @@ import {
   Pressable,
   TouchableOpacity,
   Alert,
-  Platform,
-  ToastAndroid,
 } from "react-native";
 import { useState } from "react";
 import GlobalStyles from "../utils/GlobalStyles";
-import {
-  faThumbsUp,
-  faThumbsDown,
-  faEllipsisVertical,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { API_KEY } from "@env";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 
-const Comment = ({
-  data,
-  setIsRefresh,
-  isRefresh,
-  setImages,
-  images,
-  setComment,
-  setIsEdit,
-  setCommentId,
-  navigation,
-}) => {
+const Comment = ({ data, setIsRefresh, isRefresh }) => {
   const [optionSec, setOptionSec] = useState(false);
 
-  const { token } = useSelector((state) => state.user);
-  const adminStatus = useSelector((state) => state.adminIsLoggedIn);
-
-  const addUpVote = () => {
-    if (token) {
-      if (!data.isUpVoted) {
-        Axios.post(`${API_KEY}/community/comment/upvote/${data.id}`, "", {
-          headers: { Authorization: "Bearer " + token },
-        })
-          .then(() => setIsRefresh(!isRefresh))
-          .catch((err) => console.log(err.response.data));
-      } else {
-        Axios.delete(`${API_KEY}/community/comment/removeupvote/${data.id}`, {
-          headers: { Authorization: "Bearer " + token },
-        })
-          .then(() => setIsRefresh(!isRefresh))
-          .catch((err) => console.log(err.response.data));
-      }
-    } else {
-      if (Platform.OS === "android") {
-        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
-      }
-      navigation.navigate("ProfileNavigation", {
-        screen: "profile",
-      });
-    }
-  };
-
-  const addDownVote = () => {
-    if (token) {
-      if (!data.isDownVoted) {
-        Axios.post(`${API_KEY}/community/comment/downvote/${data.id}`, "", {
-          headers: { Authorization: "Bearer " + token },
-        })
-          .then(() => setIsRefresh(!isRefresh))
-          .catch((err) => console.log(err.response.data));
-      } else {
-        Axios.delete(
-          `${API_KEY}/community/comment/removedownvote/${data.id}`,
-
-          {
-            headers: { Authorization: "Bearer " + token },
-          }
-        )
-          .then(() => setIsRefresh(!isRefresh))
-          .catch((err) => console.log(err.response.data));
-      }
-    } else {
-      if (Platform.OS === "android") {
-        ToastAndroid.show("Please Log into system", ToastAndroid.LONG);
-      }
-      navigation.navigate("ProfileNavigation", {
-        screen: "profile",
-      });
-    }
-  };
+  const { token } = useSelector((state) => state.admin);
 
   const deleteComment = (id) => {
-    Alert.alert("Delete", "Are you sure you want to delete this comment?", [
-      { text: "Cancel" },
-      {
-        text: "Delete",
-        onPress: () => {
-          Axios.delete(`${API_KEY}/community/comment/delete/${id}`, {
-            headers: { Authorization: "Bearer " + token },
-          })
-            .then(() => setIsRefresh(!isRefresh))
-            .catch((err) => console.log(err.response.data));
+    Alert.alert(
+      "Remove Comment",
+      "Are you sure you want to Remove this comment?",
+      [
+        { text: "Cancel" },
+        {
+          text: "Delete",
+          onPress: () => {
+            Axios.delete(`${API_KEY}/admin/removecomment/${id}`, {
+              headers: { Authorization: "Bearer " + token },
+            })
+              .then(() => {
+                setIsRefresh(!isRefresh);
+                setOptionSec(false);
+              })
+              .catch((err) => console.log(err.response.data));
+          },
         },
-      },
-    ]);
-  };
-
-  const editComment = (id, comment, image) => {
-    //set data
-    setCommentId(id);
-    setIsEdit(true);
-    setComment({ comment: comment });
-    setOptionSec(false);
-    setImage(image);
-  };
-
-  const setImage = (image) => {
-    let obj = [];
-    if (images.length < 2) {
-      for (const img of image) {
-        obj.push({
-          id: img.id,
-          edited: true,
-          uri: img.image_name,
-        });
-      }
-      setImages([...obj]);
-    }
+      ]
+    );
   };
 
   return (
@@ -162,68 +75,33 @@ const Comment = ({
             </View>
           </View>
         </View>
-        {!adminStatus && (
-          <View style={styles.commentVoteCol}>
-            <TouchableOpacity style={styles.voteSec} onPress={addUpVote}>
-              <FontAwesomeIcon
-                icon={faThumbsUp}
-                size={18}
-                color={data.isUpVoted && data.isUser ? "#1d917b" : "#797e85"}
-              />
-              <Text style={styles.cmText}>
-                {data.up_vote_count > 0 ? data.up_vote_count : "Upvote"}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.voteSec} onPress={addDownVote}>
-              <FontAwesomeIcon
-                icon={faThumbsDown}
-                size={18}
-                color={data.isDownVoted && data.isUser ? "#cf1754" : "#797e85"}
-              />
-              <Text style={styles.cmText}>
-                {data.down_vote_count > 0 ? data.down_vote_count : "Downvote"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        {data.isUser && (
+        <Pressable
+          style={[styles.infoContainer, optionSec && styles.overlay]}
+          onPress={() => setOptionSec(false)}
+        >
           <Pressable
-            style={[styles.infoContainer, optionSec && styles.overlay]}
-            onPress={() => setOptionSec(false)}
+            style={styles.info}
+            onPress={() => setOptionSec(!optionSec)}
           >
-            <Pressable
-              style={styles.info}
-              onPress={() => setOptionSec(!optionSec)}
-            >
-              <FontAwesomeIcon
-                icon={faEllipsisVertical}
-                size={20}
-                color={GlobalStyles.mainColor}
-              />
-            </Pressable>
-            {optionSec && (
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={[
-                    styles.button,
-                    { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
-                  ]}
-                  onPress={() => editComment(data.id, data.comment, data.image)}
-                >
-                  <Text style={styles.buttonText}>Edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => deleteComment(data.id)}
-                >
-                  <Text style={[styles.buttonText, { color: "#cf1754" }]}>
-                    Delete
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            <FontAwesomeIcon
+              icon={faEllipsisVertical}
+              size={20}
+              color={GlobalStyles.mainColor}
+            />
           </Pressable>
-        )}
+          {optionSec && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => deleteComment(data.id)}
+              >
+                <Text style={[styles.buttonText, { color: "#cf1754" }]}>
+                  Remove
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Pressable>
       </View>
     </View>
   );
