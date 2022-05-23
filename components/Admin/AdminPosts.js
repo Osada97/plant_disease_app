@@ -16,14 +16,12 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import PostImageSection from "../PostImageSection";
-import VoteContainer from "../VoteContainer";
 
 const AdminPosts = ({ item, setIsRefresh, isRefresh }) => {
   const [postImages, setPostImages] = useState([]);
   const [optionSec, setOptionSec] = useState(false);
   const navigation = useNavigation();
-  const { token } = useSelector((state) => state.user);
-
+  const { token } = useSelector((state) => state.admin);
   //take images
   useEffect(() => {
     getImages();
@@ -40,64 +38,53 @@ const AdminPosts = ({ item, setIsRefresh, isRefresh }) => {
     }
   };
 
-  const addUpVote = () => {
-    if (token) {
-      if (item.isUpVoted) {
-        Axios.post(`${API_KEY}/community/removeaddedvote/${item.id}`, "", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
-          .then(() => setIsRefresh(!isRefresh))
-          .catch((err) => console.log(err.response.data));
-      } else {
-        Axios.post(`${API_KEY}/community/addvote/${item.id}`, "", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
-          .then(() => setIsRefresh(!isRefresh))
-          .catch((err) => console.log(err.response.data));
-      }
-    }
-  };
-  const addDownVote = () => {
-    if (token) {
-      if (item.isDownVoted) {
-        Axios.post(`${API_KEY}/community/removedownvote/${item.id}`, "", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
-          .then(() => setIsRefresh(!isRefresh))
-          .catch((err) => console.log(err.response.data));
-      } else {
-        Axios.post(`${API_KEY}/community/adddownvote/${item.id}`, "", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
-          .then(() => setIsRefresh(!isRefresh))
-          .catch((err) => console.log(err.response.data));
-      }
-    }
-  };
-
   const navigateToPost = () => {
     navigation.navigate("post", { id: item.id });
+  };
+
+  const postOption = (type, id) => {
+    Alert.alert(
+      `${type} Question`,
+      `Are you sure you want to ${type} this question?`,
+      [
+        { text: "No" },
+        {
+          text: type,
+          onPress: () => {
+            if (type === "Approve") {
+              Axios.post(`${API_KEY}/admin/approvepost/${id}`, "", {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              })
+                .then(() => setIsRefresh(!isRefresh))
+                .catch((err) => console.log(err.response.data));
+            } else {
+              Axios.post(`${API_KEY}/admin/disapprovepost/${id}`, "", {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              })
+                .then(() => setIsRefresh(!isRefresh))
+                .catch((err) => console.log(err.response.data));
+            }
+          },
+        },
+      ]
+    );
   };
 
   //delete the post
   const deletePost = (id) => {
     Alert.alert(
-      "Delete Question",
-      "Are you sure you want to delete this account?",
+      "Remove Question",
+      "Are you sure you want to Remove this question?",
       [
         { text: "No" },
         {
-          text: "Delete",
+          text: "Remove",
           onPress: () => {
-            Axios.delete(`${API_KEY}/community/removeposts/${id}`, {
+            Axios.delete(`${API_KEY}/admin/removepost/${id}`, {
               headers: { Authorization: "Bearer " + token },
             })
               .then(() => setIsRefresh(!isRefresh))
@@ -131,17 +118,19 @@ const AdminPosts = ({ item, setIsRefresh, isRefresh }) => {
                 { borderBottomWidth: 1, borderBottomColor: "#c9c9c9" },
               ]}
               onPress={() =>
-                navigation.navigate("postSetting", { id: item.id })
+                postOption(item.is_approve ? "Disapprove" : "Approve", item.id)
               }
             >
-              <Text style={styles.buttonText}>Edit</Text>
+              <Text style={styles.buttonText}>
+                {item.is_approve ? "Disapprove" : "Approve"}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
               onPress={() => deletePost(item.id)}
             >
               <Text style={[styles.buttonText, { color: "#cf1754" }]}>
-                Delete
+                Remove
               </Text>
             </TouchableOpacity>
           </View>
@@ -166,13 +155,7 @@ const AdminPosts = ({ item, setIsRefresh, isRefresh }) => {
           <Text style={styles.mainText}>{item.post_title}</Text>
           <Text style={styles.disText}>{item.description}</Text>
         </View>
-        {item.is_approve ? (
-          <VoteContainer
-            item={item}
-            addDownVote={addDownVote}
-            addUpVote={addUpVote}
-          />
-        ) : (
+        {!item.is_approve && (
           <View style={styles.textCont}>
             <Text style={styles.textContText}>This Post Not Approved Yet</Text>
           </View>

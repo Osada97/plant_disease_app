@@ -41,6 +41,20 @@ const AdminProfileBottomSection = ({ navigation }) => {
             <View style={styles.icon}>
               <FontAwesomeIcon icon={faPaperclip} size={18} color="green" />
             </View>
+            <Text style={styles.listText}>Predict Plant Details</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.directButton}
+            onPress={() => navigation.navigate("predictPlantDetails")}
+          >
+            <FontAwesomeIcon icon={faChevronRight} size={18} color="green" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.listRow}>
+          <View style={styles.listRowSecOne}>
+            <View style={styles.icon}>
+              <FontAwesomeIcon icon={faPaperclip} size={18} color="green" />
+            </View>
             <Text style={styles.listText}>All Posts</Text>
           </View>
           <TouchableOpacity
