@@ -17,6 +17,7 @@ import AdminApprovedPosts from "../screens/Admin/AdminApprovedPosts";
 import AdminDisapprovedPosts from "../screens/Admin/AdminDisapprovedPosts";
 import AdminChangPassword from "../screens/Admin/AdminChangPassword";
 import PredictPlantDetails from "../screens/Admin/PredictPlantDetails";
+import AdminPostDetails from "../screens/Admin/AdminPostDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -58,6 +59,7 @@ const ProfileScreenNavigation = ({ route, navigation }) => {
             name="adminChangePassword"
             component={AdminChangPassword}
           />
+          <Stack.Screen name="adminPostDetails" component={AdminPostDetails} />
         </>
       ) : !userStatus ? (
         <>
