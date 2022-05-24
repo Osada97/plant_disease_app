@@ -109,7 +109,10 @@ const Post = ({ item, setIsRefresh, isRefresh }) => {
   };
 
   return (
-    <Pressable style={[styles.card]} onPress={() => navigateToPost()}>
+    <Pressable
+      style={[styles.card, item.is_approve && styles.disCard]}
+      onPress={() => navigateToPost()}
+    >
       {!item.default_image && <PostImageSection postImages={postImages} />}
 
       <Pressable
@@ -193,6 +196,9 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 5,
     backgroundColor: "#fff",
+  },
+  disCard: {
+    backgroundColor: "#f7f7f7",
   },
   contentSection: {
     flex: 0.5,

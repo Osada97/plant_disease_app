@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  Text,
-} from "react-native";
-import { faSearch, faPen } from "@fortawesome/free-solid-svg-icons";
+import { View, StyleSheet, FlatList, TextInput } from "react-native";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Axios from "axios";
 import { API_KEY } from "@env";
