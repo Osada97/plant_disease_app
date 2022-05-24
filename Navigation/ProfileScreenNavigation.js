@@ -18,6 +18,7 @@ import AdminDisapprovedPosts from "../screens/Admin/AdminDisapprovedPosts";
 import AdminChangPassword from "../screens/Admin/AdminChangPassword";
 import PredictPlantDetails from "../screens/Admin/PredictPlantDetails";
 import AdminPostDetails from "../screens/Admin/AdminPostDetails";
+import EditPlantDetailsNavigation from "./EditPlantDetailsNavigation";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,7 +48,7 @@ const ProfileScreenNavigation = ({ route, navigation }) => {
           <Stack.Screen name="adminProfile" component={AdminProfileScreen} />
           <Stack.Screen
             name="predictPlantDetails"
-            component={PredictPlantDetails}
+            component={EditPlantDetailsNavigation}
           />
           <Stack.Screen name="adminAllPosts" component={AdminAllPosts} />
           <Stack.Screen name="approvedPosts" component={AdminApprovedPosts} />
