@@ -5,14 +5,15 @@ import {
   StyleSheet,
   Image,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 import GlobalStyles from "../../utils/GlobalStyles";
 
-const PredictPlantDetails = () => {
-  const [plant, setPlant] = useState("potato");
+const PredictPlantDetails = ({ navigation }) => {
+  const [plantID, setPlantID] = useState(1);
   const onSelectType = (type) => {
-    if (plant !== type) {
-      setPlant(type);
+    if (plantID !== type) {
+      setPlantID(type);
     }
   };
   return (
@@ -26,7 +27,7 @@ const PredictPlantDetails = () => {
           </Text>
         </View>
         <View style={styles.imageContainer}>
-          {plant === "potato" ? (
+          {plantID === 1 ? (
             <Image
               style={styles.image}
               source={require("../../assets/jpgs/123.jpg")}
@@ -42,9 +43,9 @@ const PredictPlantDetails = () => {
           <TouchableHighlight
             style={[
               styles.secButton,
-              { backgroundColor: plant === "potato" ? "#fffce3" : "#fff" },
+              { backgroundColor: plantID === 1 ? "#fffce3" : "#fff" },
             ]}
-            onPress={() => onSelectType("potato")}
+            onPress={() => onSelectType(1)}
             underlayColor="#fffce3"
           >
             <Image
@@ -55,9 +56,9 @@ const PredictPlantDetails = () => {
           <TouchableHighlight
             style={[
               styles.secButton,
-              { backgroundColor: plant === "pepper" ? "#ffe3e3" : "#fff" },
+              { backgroundColor: plantID === 2 ? "#ffe3e3" : "#fff" },
             ]}
-            onPress={() => onSelectType("pepper")}
+            onPress={() => onSelectType(2)}
             underlayColor="#ffe3e3"
           >
             <Image
@@ -69,27 +70,40 @@ const PredictPlantDetails = () => {
       </View>
       <View style={styles.bottomSection}>
         <View style={styles.gridSection}>
-          <View style={styles.card}>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => navigation.navigate("plantForm", { id: plantID })}
+          >
             <Image
               style={styles.cardImage}
               source={require("../../assets/pngs/plant.png")}
             />
             <Text style={styles.cardText}>Edit Plant Details</Text>
-          </View>
-          <View style={styles.card}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() =>
+              navigation.navigate("editPlantDisease", { id: plantID })
+            }
+          >
             <Image
               style={styles.cardImage}
               source={require("../../assets/pngs/virus.png")}
             />
             <Text style={styles.cardText}>Edit Plant Disease Details</Text>
-          </View>
-          <View style={styles.card}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() =>
+              navigation.navigate("editPlantDiseaseMedicine", { id: plantID })
+            }
+          >
             <Image
               style={styles.cardImage}
               source={require("../../assets/pngs/medicine.png")}
             />
             <Text style={styles.cardText}>Edit Plant Disease Medicine</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
