@@ -58,6 +58,12 @@ const LoginForm = ({ navigation }) => {
               password: err.response.data.detail.password,
             });
           }
+          if (err.response.data.detail[0].msg) {
+            setErrors({
+              ...errors,
+              error: err.response.data.detail[0].msg,
+            });
+          }
           setCheckError(!checkError);
         });
     } else {
