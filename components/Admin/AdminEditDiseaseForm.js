@@ -6,13 +6,30 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import GlobalStyles from "../../utils/GlobalStyles";
 import Axios from "axios";
 import { API_KEY } from "@env";
+import ErrorModel from "../../utils/ErrorModel";
+import validateEditDisease from "./ValidateEditDisease";
+const AdminEditDiseaseForm = ({ navigation, diseases, token }) => {
+  const [diseaseValue, setDiseaseValue] = useState({
+    title: "",
+    shortDescription: "",
+    symptoms: "",
+    description: "",
+  });
+  const [error, setError] = useState({
+    title: "",
+    shortDescription: "",
+    symptoms: "",
+    description: "",
+  });
+  const [isSubmit, setIsSubmit] = useState(true);
+  const [isError, setIsError] = useState(true);
+  const [isModel, setIsModel] = useState(false);
 
-const AdminEditDiseaseForm = ({ diseases, token }) => {
-  const [details, setDetails] = useState({});
   const getDiseaseDetails = (id) => {
     Axios.get(`${API_KEY}/getdetails/disease/${id}`, {
       headers: {
@@ -20,7 +37,12 @@ const AdminEditDiseaseForm = ({ diseases, token }) => {
       },
     })
       .then((res) => {
-        setDetails({ ...res.data });
+        setDiseaseValue({
+          title: res.data.desease_name,
+          shortDescription: res.data.desease_short_description,
+          symptoms: res.data.symptoms,
+          description: res.data.description,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -32,15 +54,75 @@ const AdminEditDiseaseForm = ({ diseases, token }) => {
       if (result) getDiseaseDetails(result.id);
     }
   }, [diseases]);
+
+  useEffect(() => {
+    //check if there is an any errors and show the model
+    if (Object.keys(error).length > 0) {
+      if (error[Object.keys(error)[0]] !== "") {
+        setIsModel(true);
+      }
+    }
+  }, [isError]);
+
+  const changeValues = (value, name) => {
+    setDiseaseValue({ ...diseaseValue, [name]: value });
+  };
+
+  function submit() {
+    setError(validateEditDisease(diseaseValue));
+    setIsSubmit(true);
+    setIsError(!isError);
+  }
+
+  useEffect(() => {
+    //check if there is an any errors and show the model
+    if (Object.keys(error).length === 0 && isSubmit) {
+      handelSubmit();
+    }
+  }, [error]);
+
+  function handelSubmit() {
+    let id = diseases.find((data) => data.active == true).id;
+
+    Axios.put(
+      `${API_KEY}/updatedetails/disease/${id}`,
+
+      {
+        desease_name: diseaseValue.title,
+        desease_short_description: diseaseValue.shortDescription,
+        symptoms: diseaseValue.symptoms,
+        description: diseaseValue.description,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    )
+      .then(() => {
+        Alert.alert("Message", "Disease details updated");
+        navigation.goBack();
+      })
+      .catch((err) => console.log(err.response.data));
+  }
+
   return (
     <ScrollView>
+      {isModel && (
+        <ErrorModel
+          title="SignUp Failed"
+          msg={error}
+          type="Error"
+          setIsModel={setIsModel}
+        />
+      )}
       <View style={styles.formSec}>
-        <Text style={styles.title}>{details.desease_name}</Text>
+        <Text style={styles.title}>{diseaseValue.title}</Text>
         <View style={styles.inputField}>
           <Text style={styles.label}>Disease Name</Text>
           <TextInput
             style={styles.inputStyle}
-            value={details.desease_name}
+            value={diseaseValue.title}
             editable={false}
           />
         </View>
@@ -48,18 +130,20 @@ const AdminEditDiseaseForm = ({ diseases, token }) => {
           <Text style={styles.label}>Disease Short Description</Text>
           <TextInput
             style={styles.inputStyle}
-            value={details.desease_short_description}
+            value={diseaseValue.shortDescription}
+            onChangeText={(text) => changeValues(text, "shortDescription")}
           />
         </View>
-        {!details?.desease_name?.includes("Healthy") &&
-          !details?.desease_name?.includes("healthy") && (
+        {!diseaseValue?.title?.includes("Healthy") &&
+          !diseaseValue?.title?.includes("healthy") && (
             <View style={styles.inputField}>
               <Text style={styles.label}>Symptoms</Text>
               <TextInput
                 multiline={true}
                 numberOfLines={4}
                 style={styles.inputStyle}
-                value={details.symptoms}
+                value={diseaseValue.symptoms}
+                onChangeText={(text) => changeValues(text, "symptoms")}
               />
             </View>
           )}
@@ -69,11 +153,12 @@ const AdminEditDiseaseForm = ({ diseases, token }) => {
             multiline={true}
             numberOfLines={10}
             style={styles.inputStyle}
-            value={details.description}
+            value={diseaseValue.description}
+            onChangeText={(text) => changeValues(text, "description")}
           />
         </View>
         <View>
-          <TouchableOpacity style={styles.mainButton}>
+          <TouchableOpacity style={styles.mainButton} onPress={submit}>
             <Text style={styles.mainButtonText}>Update</Text>
           </TouchableOpacity>
         </View>
