@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import GlobalStyles from "../../utils/GlobalStyles";
 import AdminEditMedicine from "../../components/Admin/AdminEditMedicine";
 
-const EditPlantDiseaseMedi = ({ route }) => {
+const EditPlantDiseaseMedi = ({ route, navigation }) => {
   const [diseases, setDiseases] = useState([]);
 
   const { token } = useSelector((state) => state.admin);
@@ -66,7 +66,11 @@ const EditPlantDiseaseMedi = ({ route }) => {
             );
         })}
       </View>
-      <AdminEditMedicine diseases={diseases} token={token} />
+      <AdminEditMedicine
+        diseases={diseases}
+        token={token}
+        navigation={navigation}
+      />
     </View>
   );
 };
