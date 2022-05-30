@@ -14,10 +14,12 @@ import CustomHeader from "../components/CustomHeader";
 import PredictDetailSec from "../components/PredictDetailSec";
 import HorizontalImageList from "../components/HorizontalImageList";
 import Axios from "axios";
+import Loader from "../components/Loader";
 
 const PredictPlantScreen = ({ route, navigation }) => {
   const { type, plantType } = route.params;
   const [plantDetails, setPlantDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const windowWidth = Dimensions.get("window").width;
 
   //hide bottom tab navigation
@@ -94,6 +96,7 @@ const PredictPlantScreen = ({ route, navigation }) => {
 
   //call axios function
   const getPredictedResults = async (files) => {
+    setIsLoading(true);
     let formData = new FormData();
 
     formData.append("file", {
@@ -111,8 +114,10 @@ const PredictPlantScreen = ({ route, navigation }) => {
     let responseJson = await res.json();
 
     if (responseJson) {
+      setIsLoading(true);
       await Axios.get(`${API_KEY}/getplantdetails/${responseJson.class.id}`)
         .then((res) => {
+          setIsLoading(false);
           objectRecreate(res.data);
         })
         .catch((err) => console.log(err));
@@ -152,57 +157,68 @@ const PredictPlantScreen = ({ route, navigation }) => {
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <ScrollView style={styles.screen}>
-      <View style={styles.imageViewerSection}>
-        <Animated.FlatList
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: true }
-          )}
-          data={plantDetails.coverImage}
-          renderItem={({ item, index }) => {
-            return (
-              <HorizontalImageList
-                imageUri={item}
-                index={index}
-                scrollX={scrollX}
-              />
-            );
-          }}
-          keyExtractor={(item) => item}
-          horizontal
-          decelerationRate={0.9}
-          snapToInterval={windowWidth * 0.95}
-          scrollEventThrottle={16}
-          bounces={false}
-          contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 10 }}
-        />
-      </View>
-      <View style={styles.detailsSection}>
-        <Image
-          source={{
-            uri: "https://reactnative.dev/img/tiny_logo.png",
-          }}
-          width={500}
-          height={500}
-          resizeMode="cover"
-        />
-        {plantDetails.section ? (
-          Object.keys(plantDetails.section).map(
-            (data, index) =>
-              plantDetails.section[data] !== "" && (
-                <PredictDetailSec
-                  key={index}
-                  data={plantDetails.section[data]}
-                  title={data}
-                />
-              )
-          )
-        ) : (
-          <Text>There is nothing to show</Text>
-        )}
-      </View>
+      {plantDetails.section ? (
+        <>
+          <View style={styles.imageViewerSection}>
+            <Animated.FlatList
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                { useNativeDriver: true }
+              )}
+              data={plantDetails.coverImage}
+              renderItem={({ item, index }) => {
+                return (
+                  <HorizontalImageList
+                    imageUri={item}
+                    index={index}
+                    scrollX={scrollX}
+                  />
+                );
+              }}
+              keyExtractor={(item) => item}
+              horizontal
+              decelerationRate={0.9}
+              snapToInterval={windowWidth * 0.95}
+              scrollEventThrottle={16}
+              bounces={false}
+              contentContainerStyle={{
+                paddingHorizontal: 10,
+                paddingBottom: 10,
+              }}
+            />
+          </View>
+          <View style={styles.detailsSection}>
+            <Image
+              source={{
+                uri: "https://reactnative.dev/img/tiny_logo.png",
+              }}
+              width={500}
+              height={500}
+              resizeMode="cover"
+            />
+            {plantDetails.section &&
+              Object.keys(plantDetails.section).map(
+                (data, index) =>
+                  plantDetails.section[data] !== "" && (
+                    <PredictDetailSec
+                      key={index}
+                      data={plantDetails.section[data]}
+                      title={data}
+                    />
+                  )
+              )}
+          </View>
+        </>
+      ) : (
+        <View style={styles.wrapper}>
+          <Loader />
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -223,6 +239,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 15,
+    backgroundColor: "#fff",
+  },
+  wrapper: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
     backgroundColor: "#fff",
   },
 });
