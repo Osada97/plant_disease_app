@@ -8,6 +8,7 @@ import Axios from "axios";
 import { useSelector } from "react-redux";
 import BottomAddCommentSection from "../components/BottomAddCommentSection";
 import GlobalStyles from "../utils/GlobalStyles";
+import Loader from "../components/Loader";
 
 const CommunityPostDetails = ({ route, navigation }) => {
   const [postDetails, setPostDetails] = useState(null);
@@ -16,6 +17,7 @@ const CommunityPostDetails = ({ route, navigation }) => {
   const [comment, setComment] = useState({ comment: "" });
   const [isEdit, setIsEdit] = useState(false);
   const [commentId, setCommentId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { token } = useSelector((state) => state.user);
   const { id } = route.params;
@@ -30,21 +32,29 @@ const CommunityPostDetails = ({ route, navigation }) => {
 
   useEffect(() => {
     if (token) {
+      setIsLoading(true);
       Axios.get(`${API_KEY}/community/getonepost/${id}`, {
         headers: { Authorization: "Bearer " + token },
       })
         .then((res) => {
+          setIsLoading(false);
           setPostDetails(res.data);
         })
         .catch((err) => console.log(err.response.data));
     } else {
+      setIsLoading(true);
       Axios.get(`${API_KEY}/community/getpostdetails/${id}`)
         .then((res) => {
+          setIsLoading(false);
           setPostDetails(res.data);
         })
         .catch((err) => console.log(err.response.data));
     }
   }, [isRefresh]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <>
       <ScrollView style={styles.screen}>

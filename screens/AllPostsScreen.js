@@ -17,16 +17,19 @@ import { useSelector } from "react-redux";
 import GlobalStyles from "../utils/GlobalStyles";
 import CommunityPost from "../components/CommunityPost";
 import { useIsFocused } from "@react-navigation/native";
+import Loader from "../components/Loader";
 
 const AllPostsScreen = ({ navigation }) => {
   const [postData, setPostData] = useState([]);
   const [isRefresh, setIsRefresh] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
 
   const { userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (isFocused) {
+      setIsLoading(true);
       Axios.get(
         `${API_KEY}/community/getpost`,
         Object.keys(userDetails).length > 0 && {
@@ -36,6 +39,7 @@ const AllPostsScreen = ({ navigation }) => {
         }
       )
         .then((res) => {
+          setIsLoading(false);
           setPostData([...res.data]);
         })
         .catch((err) => console.log(err.response.data));
@@ -55,7 +59,9 @@ const AllPostsScreen = ({ navigation }) => {
       });
     }
   };
-
+  if (isLoading && postData.length === 0) {
+    return <Loader />;
+  }
   return (
     <View style={styles.screen}>
       <View style={styles.searchContainer}>

@@ -16,7 +16,6 @@ import AdminAllPosts from "../screens/Admin/AdminAllPosts";
 import AdminApprovedPosts from "../screens/Admin/AdminApprovedPosts";
 import AdminDisapprovedPosts from "../screens/Admin/AdminDisapprovedPosts";
 import AdminChangPassword from "../screens/Admin/AdminChangPassword";
-import PredictPlantDetails from "../screens/Admin/PredictPlantDetails";
 import AdminPostDetails from "../screens/Admin/AdminPostDetails";
 import EditPlantDetailsNavigation from "./EditPlantDetailsNavigation";
 

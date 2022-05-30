@@ -15,23 +15,32 @@ import { API_KEY } from "@env";
 import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import GlobalStyles from "../utils/GlobalStyles";
+import Loader from "../components/Loader";
 
 const UserPostsScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
   const [isRefresh, setIsRefresh] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   const { token, userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
+    setIsLoading(true);
     Axios.get(`${API_KEY}/community/getuserposts/${userDetails.id}`, {
       headers: {
         Authorization: "Bearer " + token,
       },
     })
-      .then((res) => setUserPosts([...res.data]))
+      .then((res) => {
+        setIsLoading(false);
+        setUserPosts([...res.data]);
+      })
       .catch((err) => console.log(err));
   }, [isRefresh, isFocused]);
 
+  if (isLoading && userPosts.length === 0) {
+    return <Loader />;
+  }
   return (
     <View style={styles.screen}>
       <View style={styles.searchContainer}>
