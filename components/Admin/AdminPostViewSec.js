@@ -15,7 +15,7 @@ import { API_KEY } from "@env";
 import PostImageSection from "../PostImageSection";
 import { useSelector } from "react-redux";
 import Axios from "axios";
-import { NavigationContainer } from "@react-navigation/native";
+import { formatDistanceToNow, parseISO } from "date-fns";
 
 const AdminPostViewSec = ({
   postDetails,
@@ -97,7 +97,9 @@ const AdminPostViewSec = ({
               owner.last_name || ""
             }`}</Text>
             <Text style={styles.location}>{owner.location || ""}</Text>
-            <Text style={styles.time}>One Day Ago</Text>
+            <Text style={styles.time}>
+              {formatDistanceToNow(parseISO(postDetails.post_date))} Ago
+            </Text>
           </View>
         </View>
       </View>

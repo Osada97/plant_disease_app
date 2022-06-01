@@ -17,6 +17,7 @@ import Axios from "axios";
 import { useSelector } from "react-redux";
 import PostImageSection from "./PostImageSection";
 import VoteContainer from "./VoteContainer";
+import { formatDistanceToNow, parseISO } from "date-fns";
 
 const Post = ({ item, setIsRefresh, isRefresh }) => {
   const [postImages, setPostImages] = useState([]);
@@ -162,7 +163,9 @@ const Post = ({ item, setIsRefresh, isRefresh }) => {
               {item.owner.first_name + " " + item.owner.last_name}
             </Text>
             <Text style={styles.location}>{item.owner.location}</Text>
-            <Text style={styles.time}>1d Ago</Text>
+            <Text style={styles.time}>
+              {formatDistanceToNow(parseISO(item.post_date))} Ago
+            </Text>
           </View>
         </View>
         <View style={styles.content}>

@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { API_KEY } from "@env";
 import Axios from "axios";
 import { useSelector } from "react-redux";
+import { formatDistanceToNow, parseISO } from "date-fns";
 
 const Comment = ({ data, setIsRefresh, isRefresh }) => {
   const [optionSec, setOptionSec] = useState(false);
@@ -55,7 +56,9 @@ const Comment = ({ data, setIsRefresh, isRefresh }) => {
             />
             <View>
               <Text style={styles.commentName}>{data.user.first_name}</Text>
-              <Text style={styles.commentDate}>2 Days</Text>
+              <Text style={styles.commentDate}>
+                {formatDistanceToNow(parseISO(data.comment_date))} Ago
+              </Text>
             </View>
           </View>
           <View style={styles.commentDetails}>

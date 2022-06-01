@@ -14,6 +14,7 @@ import { API_KEY } from "@env";
 import PostImageSection from "./PostImageSection";
 import VoteSection from "./VoteSection";
 import { useSelector } from "react-redux";
+import { formatDistanceToNow, parseISO } from "date-fns";
 
 const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
   const { owner, images } = postDetails;
@@ -58,7 +59,9 @@ const PostViewSec = ({ postDetails, setIsRefresh, isRefresh, navigation }) => {
               owner.last_name || ""
             }`}</Text>
             <Text style={styles.location}>{owner.location || ""}</Text>
-            <Text style={styles.time}>One Day Ago</Text>
+            <Text style={styles.time}>
+              {formatDistanceToNow(parseISO(postDetails.post_date))} Ago
+            </Text>
           </View>
         </View>
       </View>
