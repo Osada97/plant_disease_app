@@ -38,7 +38,6 @@ const EditPlantForm = ({ route, navigation }) => {
       },
     })
       .then((res) => {
-        console.log(res.data.description);
         setPlantDetails({
           plantName: res.data.plant_name,
           scienceName: res.data.science_name,

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import GlobalStyles from "../../utils/GlobalStyles";
 import AdminPosts from "../../components/Admin/AdminPosts";
+import EmptyPageComponent from "../../components/EmptyPageComponent";
 
 const AdminApprovedPosts = () => {
   const [userPosts, setUserPosts] = useState([]);
@@ -37,7 +38,7 @@ const AdminApprovedPosts = () => {
         </View>
       </View>
       <View style={styles.cardContainer}>
-        {userPosts.length > 0 && (
+        {userPosts.length > 0 ? (
           <FlatList
             style={styles.listStyle}
             data={userPosts}
@@ -50,6 +51,8 @@ const AdminApprovedPosts = () => {
             )}
             keyExtractor={(item) => item.id}
           />
+        ) : (
+          <EmptyPageComponent />
         )}
       </View>
     </View>

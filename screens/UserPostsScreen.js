@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import GlobalStyles from "../utils/GlobalStyles";
 import Loader from "../components/Loader";
+import EmptyPageComponent from "../components/EmptyPageComponent";
 
 const UserPostsScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
@@ -53,7 +54,7 @@ const UserPostsScreen = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.cardContainer}>
-        {userPosts.length > 0 && (
+        {userPosts.length > 0 ? (
           <FlatList
             style={styles.listStyle}
             data={userPosts}
@@ -66,6 +67,8 @@ const UserPostsScreen = ({ navigation }) => {
             )}
             keyExtractor={(item) => item.id}
           />
+        ) : (
+          <EmptyPageComponent />
         )}
       </View>
       {/* add post section */}

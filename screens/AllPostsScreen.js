@@ -18,6 +18,7 @@ import GlobalStyles from "../utils/GlobalStyles";
 import CommunityPost from "../components/CommunityPost";
 import { useIsFocused } from "@react-navigation/native";
 import Loader from "../components/Loader";
+import EmptyPageComponent from "../components/EmptyPageComponent";
 
 const AllPostsScreen = ({ navigation }) => {
   const [postData, setPostData] = useState([]);
@@ -74,7 +75,7 @@ const AllPostsScreen = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.cardContainer}>
-        {postData.length > 0 && (
+        {postData.length > 0 ? (
           <FlatList
             style={styles.listStyle}
             data={postData}
@@ -87,16 +88,20 @@ const AllPostsScreen = ({ navigation }) => {
             )}
             keyExtractor={(item) => item.id}
           />
+        ) : (
+          <EmptyPageComponent />
         )}
       </View>
       {/* add post section */}
-      <TouchableOpacity
-        style={styles.addSection}
-        onPress={() => navigateToAskQuestion()}
-      >
-        <FontAwesomeIcon icon={faPen} size={18} color="#fff" />
-        <Text style={styles.addSectionText}>Ask Question</Text>
-      </TouchableOpacity>
+      {postData.length > 0 && (
+        <TouchableOpacity
+          style={styles.addSection}
+          onPress={() => navigateToAskQuestion()}
+        >
+          <FontAwesomeIcon icon={faPen} size={18} color="#fff" />
+          <Text style={styles.addSectionText}>Ask Question</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -145,5 +150,9 @@ const styles = StyleSheet.create({
   addSectionText: {
     fontFamily: GlobalStyles.mediumFonts,
     color: "#fff",
+  },
+  cardContainer: {
+    width: "100%",
+    height: "100%",
   },
 });
